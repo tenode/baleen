@@ -1,0 +1,12 @@
+# Baleen configuration
+
+# Log info level only out to the console
+logging:
+  loggers:
+    - name: console
+      minLevel: INFO
+
+# An example pipeline, you should either amend or remove this for production systems
+pipelines:
+  - name: pipeline
+    file: pipeline.yml

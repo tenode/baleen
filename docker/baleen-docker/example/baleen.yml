@@ -1,0 +1,5 @@
+# Baleen configuration
+
+pipelines:
+  - name: pipeline
+    file: pipeline.yml

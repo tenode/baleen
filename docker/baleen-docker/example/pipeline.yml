@@ -1,0 +1,18 @@
+# This is an example container which reads from the data sub directory
+# processes to extract common regex and outputs to
+# a count of entities
+
+collectionreader:
+  class: FolderReader
+  folders:
+    - ./data
+
+annotators:
+  - class: regex.Email
+  - class: regex.Url
+
+consumers:
+  # Normally you would not want this, especially in Docker server
+  # However it's an easy test that things are working
+  - class: EntityCount
+    outputFile: output/entityCount.tsv

@@ -1,0 +1,84 @@
+# This is an example container which reads from the data sub directory
+# performs a extensive analysis and outputs to ElasticSearch and Mongo.
+
+# Use the Elasticsearch docker-compose container
+mongo:
+  host: mongo
+
+# Use the Elasticsearch docker-compose container
+elasticsearch:
+  host: elasticsearch
+
+collectionreader:
+  class: FolderReader
+  folders:
+    - ./data
+
+annotators:
+- language.OpenNLP
+- class: misc.DocumentTypeByLocation
+  baseDirectory: ./data
+- gazetteer.Country
+- class: gazetteer.Mongo
+  type: Buzzword
+  collection: buzzwords
+- class: gazetteer.Mongo
+  type: Location
+  collection: location
+- class: gazetteer.Mongo
+  type: Organisation
+  collection: organisations
+- class: gazetteer.Mongo
+  type: Person
+  collection: people
+- regex.Area
+- regex.BritishArmyUnits
+- regex.Callsign
+- regex.Date
+- regex.DateTime
+- regex.Distance
+- regex.Dtg
+- regex.Email
+- regex.FlightNumber
+- regex.Frequency
+- regex.IpV4
+- regex.LatLon
+- regex.Mgrs
+- regex.Money
+- regex.Nationality
+- regex.Osgb
+- regex.Postcode
+- regex.TaskForce
+- regex.Telephone
+- regex.Time
+- regex.TimeQuantity
+- regex.Url
+- regex.Volume
+- regex.Weight
+- class: stats.OpenNLP
+  model: /opt/baleen/models/en-ner-location.bin
+  type: Location
+- class: stats.OpenNLP
+  model: /opt/baleen/models/en-ner-organization.bin
+  type: Organisation
+- class: stats.OpenNLP
+  model: /opt/baleen/models/en-ner-person.bin
+  type: Person
+- cleaners.MergeAdjacentQuantities
+- grammatical.NPTitleEntity
+- grammatical.QuantityNPEntity
+- grammatical.TOLocationEntity
+- cleaners.RemoveLowConfidenceEntities
+- cleaners.RemoveNestedDateTimes
+- cleaners.RemoveNestedEntities
+- cleaners.RemoveNestedLocations
+- cleaners.NormalizeWhitespace
+- cleaners.CleanDates
+- cleaners.CleanPunctuation
+- cleaners.AddTimeSpans
+- cleaners.CorefCapitalisationAndApostrophe
+- cleaners.CorefLocationCoordinate
+
+consumers:
+- Elasticsearch
+- Mongo

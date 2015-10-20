@@ -1,0 +1,42 @@
+# Baleen
+baleen:
+  # Swap between image and build depending if you already have built baleen.
+  image: dstl/baleen
+  # build: ./baleen-docker
+  # Use baleen.yml as the  config
+  # (so that should exist in the ./baleen subdir)
+  command: baleen.yml
+  ports:
+   - "6413:6413"
+  volumes:
+   - ./baleen:/baleen
+  links:
+   - mongo
+   - elasticsearch
+
+# ElasticSearch
+# Version 1.7 (Baleen POM uses 1.7.1)
+# Note the API is exposed to the host, but this is only
+# required to access the output of Baleen and not for
+# Baleen's operation.
+elasticsearch:
+  image: elasticsearch:1.7
+  ports:
+  - "9200:9200"
+  - "9300:9300"
+  volumes:
+  # If you have a very specific configuration
+  # ./config/elasticsearch:/usr/share/elasticsearch/config
+  - ./data/elasticsearch:/usr/share/elasticsearch/data
+
+# MongoDb
+# Version 2.6 (Baleen supports 2.x)
+# Note the database is optionally exposed to the host
+# but this is not required for Baleen operations
+# only to access the output of pipelines
+mongo:
+  image: mongo:2.6
+  ports:
+  - "27017:27017"
+  volumes:
+  - ./data/mongo:/data/db
