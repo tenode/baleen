@@ -17,7 +17,7 @@ collectionreader:
 annotators:
 - language.OpenNLP
 - class: misc.DocumentTypeByLocation
-  baseDirectory: ./data
+  baseDirectory: /baleen/data
 - gazetteer.Country
 - class: gazetteer.Mongo
   type: Buzzword

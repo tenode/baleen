@@ -2,8 +2,8 @@
 
 This folder contains two approaches to using Baleen with Docker.
 
-* A Dockerfile providing a 'Baleen Docker application'.
-* Docker Compose which run Baleen alongside Mongo and Elasticsearch
+* A Dockerfile providing a 'Baleen Docker application'. This is a vanilla Baleen which you can configure and integrate with outside services if you need to, or you can just use it as a command line applicaiton to process files as the baleen-docker/example does.
+* Docker Compose which run Baleen alongside Mongo and Elasticsearch. It provides a more comprehensive configuration example which allow you to use Baleen straight away with your documents you place in the baleen/data directory.
 
 These Docker implementations are examples and should be further configured and secured for production use.  
 
@@ -54,7 +54,7 @@ Or, to run and wait:
 
 Both of these will download and build Elasticsearch and Mongo images, and configure Baleen to use them. The Elasticsearch and Mongo services will be available on the host machine on their standard ports (9200 and 27017 respectively).
 
-YOu can configure Baleen by editting the files in the /baleen directory. The sample configuration provided will read from the baleen/data directory, process the data and download output to the Elasticseach and Mongo. For example, after running Baleen you can search for documents with urls using Elasticsearch:
+You can configure Baleen by editting the files in the /baleen directory. The sample configuration provided will read from the baleen/data directory, process the data and download output to the Elasticseach and Mongo. For example, after running Baleen you can search for documents with urls using Elasticsearch:
 
     $ curl localhost:9200/baleen_index/_search?q=entities.type=Url\&pretty
 

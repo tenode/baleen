@@ -1,5 +1,2 @@
-data/
-baleen/output/
-baleen-docker/example/output/
 *.jar
 *~

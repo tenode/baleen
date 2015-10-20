@@ -7,21 +7,21 @@ ENV BALEEN_VERSION 2.0.0
 
 # Download the (English) OpenNLP Name Entity Recognition models
 RUN mkdir -p /opt/baleen/models \
- && wget -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-date.bin \
- && wget -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-location.bin \
- && wget -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-money.bin.bin \
- && wget -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-organization.bin.bin \
- && wget -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-percentage.bin  \
- && wget -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-person.bin \
- && wget -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-time.bin
+ && wget -q -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-date.bin \
+ && wget -q -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-location.bin \
+ && wget -q -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-money.bin \
+ && wget -q -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-organization.bin \
+ && wget -q -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-percentage.bin  \
+ && wget -q -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-person.bin \
+ && wget -q -P /opt/baleen/models/ http://opennlp.sourceforge.net/models-1.5/en-ner-time.bin
 
 # Now create the necessary directories (/baleen used as a volume, /opt/baleen for the jars):
 
 # Either, download the Jars direct from github releases
 RUN mkdir -p /baleen \
  && mkdir -p /opt/baleen \
- && wget -O /opt/baleen/baleen.jar https://github.com/dstl/baleen/releases/download/v${BALEEN_VERSION}/baleen-${BALEEN_VERSION}.jar \
- && wget -O /opt/baleen/baleen-javadoc.jar https://github.com/dstl/baleen/releases/download/v${BALEEN_VERSION}/baleen-${BALEEN_VERSION}-javadoc.jar
+ && wget -q -O /opt/baleen/baleen.jar https://github.com/dstl/baleen/releases/download/v${BALEEN_VERSION}/baleen-${BALEEN_VERSION}.jar \
+ && wget -q -O /opt/baleen/baleen-javadoc.jar https://github.com/dstl/baleen/releases/download/v${BALEEN_VERSION}/baleen-${BALEEN_VERSION}-javadoc.jar
 # Or, if you have a local version you can comment out the wget above
 # and use the ADD line instead.
 # ADD baleen-${BALEEN_VERSION}.jar /opt/baleen/baleen.jar
