@@ -54,6 +54,8 @@ Or, to run and wait:
 
 Both of these will download and build Elasticsearch and Mongo images, and configure Baleen to use them. The Elasticsearch and Mongo services will be available on the host machine on their standard ports (9200 and 27017 respectively).
 
+Warning! To allow you to easily access Elasticsearch from an online tools of your choice, such as [ElasticHQ](http://www.elastichq.org/app/index.php), the docker-compose image has CORS enabled (the default is disabled). You can disable this by commenting out the command: "-Des.http.cors.enabled=true" or change the allowed origins (-Dhttp.cors.allow-origin) to just the tools are using. See https://github.com/elastic/elasticsearch/issues/7151 for more details.
+
 You can configure Baleen by editting the files in the /baleen directory. The sample configuration provided will read from the baleen/data directory, process the data and download output to the Elasticseach and Mongo. For example, after running Baleen you can search for documents with urls using Elasticsearch:
 
     $ curl localhost:9200/baleen_index/_search?q=entities.type=Url\&pretty

@@ -28,6 +28,7 @@ elasticsearch:
   # If you have a very specific configuration
   # ./config/elasticsearch:/usr/share/elasticsearch/config
   - ./data/elasticsearch:/usr/share/elasticsearch/data
+  command: "-Des.http.cors.enabled=true"
 
 # MongoDb
 # Version 2.6 (Baleen supports 2.x)
