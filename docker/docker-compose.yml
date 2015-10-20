@@ -2,7 +2,7 @@
 baleen:
   # Swap between image and build depending if you already have built baleen.
   # image: dstl/baleen
-  build: ./baleen-docker
+  build: baleen-docker
   # Use baleen.yml as the  config
   # (so that should exist in the ./baleen subdir)
   command: baleen.yml
