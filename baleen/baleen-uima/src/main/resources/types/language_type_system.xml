@@ -135,8 +135,9 @@ This XML file classified as UK OFFICIAL.</description>
         </featureDescription>
         <featureDescription>
           <name>words</name>
-          <description>The normal form for this lemma.</description>
-          <rangeTypeName>uima.cas.String</rangeTypeName>
+          <description>The collection of word tokens which form this pattern.</description>
+          <rangeTypeName>uima.cas.FSArray</rangeTypeName>
+        <elementType>uk.gov.dstl.baleen.types.language.WordToken</elementType>
         </featureDescription>
       </features>
     </typeDescription>      

@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import uk.gov.dstl.baleen.types.Base_Type;
 
 /** The text pattern between two annotations (usually entities) which has been processed to be more meaningful than simply the covered text between them
- * Updated by JCasGen Thu Jan 21 11:56:21 GMT 2016
+ * Updated by JCasGen Thu Jan 21 13:22:42 GMT 2016
  * @generated */
 public class Pattern_Type extends Base_Type {
   /** @generated 
@@ -102,21 +102,48 @@ public class Pattern_Type extends Base_Type {
    * @param addr low level Feature Structure reference
    * @return the feature value 
    */ 
-  public String getWords(int addr) {
+  public int getWords(int addr) {
         if (featOkTst && casFeat_words == null)
       jcas.throwFeatMissing("words", "uk.gov.dstl.baleen.types.language.Pattern");
-    return ll_cas.ll_getStringValue(addr, casFeatCode_words);
+    return ll_cas.ll_getRefValue(addr, casFeatCode_words);
   }
   /** @generated
    * @param addr low level Feature Structure reference
    * @param v value to set 
    */    
-  public void setWords(int addr, String v) {
+  public void setWords(int addr, int v) {
         if (featOkTst && casFeat_words == null)
       jcas.throwFeatMissing("words", "uk.gov.dstl.baleen.types.language.Pattern");
-    ll_cas.ll_setStringValue(addr, casFeatCode_words, v);}
+    ll_cas.ll_setRefValue(addr, casFeatCode_words, v);}
     
-  
+   /** @generated
+   * @param addr low level Feature Structure reference
+   * @param i index of item in the array
+   * @return value at index i in the array 
+   */
+  public int getWords(int addr, int i) {
+        if (featOkTst && casFeat_words == null)
+      jcas.throwFeatMissing("words", "uk.gov.dstl.baleen.types.language.Pattern");
+    if (lowLevelTypeChecks)
+      return ll_cas.ll_getRefArrayValue(ll_cas.ll_getRefValue(addr, casFeatCode_words), i, true);
+    jcas.checkArrayBounds(ll_cas.ll_getRefValue(addr, casFeatCode_words), i);
+  return ll_cas.ll_getRefArrayValue(ll_cas.ll_getRefValue(addr, casFeatCode_words), i);
+  }
+   
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param i index of item in the array
+   * @param v value to set
+   */ 
+  public void setWords(int addr, int i, int v) {
+        if (featOkTst && casFeat_words == null)
+      jcas.throwFeatMissing("words", "uk.gov.dstl.baleen.types.language.Pattern");
+    if (lowLevelTypeChecks)
+      ll_cas.ll_setRefArrayValue(ll_cas.ll_getRefValue(addr, casFeatCode_words), i, v, true);
+    jcas.checkArrayBounds(ll_cas.ll_getRefValue(addr, casFeatCode_words), i);
+    ll_cas.ll_setRefArrayValue(ll_cas.ll_getRefValue(addr, casFeatCode_words), i, v);
+  }
+ 
 
 
 
@@ -138,7 +165,7 @@ public class Pattern_Type extends Base_Type {
     casFeatCode_target  = (null == casFeat_target) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_target).getCode();
 
  
-    casFeat_words = jcas.getRequiredFeatureDE(casType, "words", "uima.cas.String", featOkTst);
+    casFeat_words = jcas.getRequiredFeatureDE(casType, "words", "uima.cas.FSArray", featOkTst);
     casFeatCode_words  = (null == casFeat_words) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_words).getCode();
 
   }
