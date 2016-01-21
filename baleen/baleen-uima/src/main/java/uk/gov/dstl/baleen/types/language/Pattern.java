@@ -7,11 +7,12 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.JCasRegistry;
 import org.apache.uima.jcas.cas.TOP_Type;
 
+import org.apache.uima.jcas.cas.FSArray;
 import uk.gov.dstl.baleen.types.Base;
 
 
 /** The text pattern between two annotations (usually entities) which has been processed to be more meaningful than simply the covered text between them
- * Updated by JCasGen Thu Jan 21 11:56:21 GMT 2016
+ * Updated by JCasGen Thu Jan 21 13:22:42 GMT 2016
  * XML source: /home/chrisflatley/Tenode/Projects/baleen/baleen/baleen-uima/src/main/resources/types/language_type_system.xml
  * @generated */
 public class Pattern extends Base {
@@ -123,23 +124,45 @@ public class Pattern extends Base {
   //*--------------*
   //* Feature: words
 
-  /** getter for words - gets The normal form for this lemma.
+  /** getter for words - gets The collection of word tokens which form this pattern.
    * @generated
    * @return value of the feature 
    */
-  public String getWords() {
+  public FSArray getWords() {
     if (Pattern_Type.featOkTst && ((Pattern_Type)jcasType).casFeat_words == null)
       jcasType.jcas.throwFeatMissing("words", "uk.gov.dstl.baleen.types.language.Pattern");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((Pattern_Type)jcasType).casFeatCode_words);}
+    return (FSArray)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Pattern_Type)jcasType).casFeatCode_words)));}
     
-  /** setter for words - sets The normal form for this lemma. 
+  /** setter for words - sets The collection of word tokens which form this pattern. 
    * @generated
    * @param v value to set into the feature 
    */
-  public void setWords(String v) {
+  public void setWords(FSArray v) {
     if (Pattern_Type.featOkTst && ((Pattern_Type)jcasType).casFeat_words == null)
       jcasType.jcas.throwFeatMissing("words", "uk.gov.dstl.baleen.types.language.Pattern");
-    jcasType.ll_cas.ll_setStringValue(addr, ((Pattern_Type)jcasType).casFeatCode_words, v);}    
+    jcasType.ll_cas.ll_setRefValue(addr, ((Pattern_Type)jcasType).casFeatCode_words, jcasType.ll_cas.ll_getFSRef(v));}    
+    
+  /** indexed getter for words - gets an indexed value - The collection of word tokens which form this pattern.
+   * @generated
+   * @param i index in the array to get
+   * @return value of the element at index i 
+   */
+  public WordToken getWords(int i) {
+    if (Pattern_Type.featOkTst && ((Pattern_Type)jcasType).casFeat_words == null)
+      jcasType.jcas.throwFeatMissing("words", "uk.gov.dstl.baleen.types.language.Pattern");
+    jcasType.jcas.checkArrayBounds(jcasType.ll_cas.ll_getRefValue(addr, ((Pattern_Type)jcasType).casFeatCode_words), i);
+    return (WordToken)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefArrayValue(jcasType.ll_cas.ll_getRefValue(addr, ((Pattern_Type)jcasType).casFeatCode_words), i)));}
+
+  /** indexed setter for words - sets an indexed value - The collection of word tokens which form this pattern.
+   * @generated
+   * @param i index in the array to set
+   * @param v value to set into the array 
+   */
+  public void setWords(int i, WordToken v) { 
+    if (Pattern_Type.featOkTst && ((Pattern_Type)jcasType).casFeat_words == null)
+      jcasType.jcas.throwFeatMissing("words", "uk.gov.dstl.baleen.types.language.Pattern");
+    jcasType.jcas.checkArrayBounds(jcasType.ll_cas.ll_getRefValue(addr, ((Pattern_Type)jcasType).casFeatCode_words), i);
+    jcasType.ll_cas.ll_setRefArrayValue(jcasType.ll_cas.ll_getRefValue(addr, ((Pattern_Type)jcasType).casFeatCode_words), i, jcasType.ll_cas.ll_getFSRef(v));}
   }
 
     
