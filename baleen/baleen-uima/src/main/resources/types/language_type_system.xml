@@ -118,5 +118,27 @@ This XML file classified as UK OFFICIAL.</description>
         </featureDescription>
       </features>
     </typeDescription>
+    <typeDescription>
+      <name>uk.gov.dstl.baleen.types.language.Pattern</name>
+      <description>The text pattern between two annotations (usually entities) which has been processed to be more meaningful than simply the covered text between them</description>
+      <supertypeName>uk.gov.dstl.baleen.types.Base</supertypeName>
+      <features>
+        <featureDescription>
+          <name>source</name>
+          <description>The source entity (first entity in the sentence)</description>
+          <rangeTypeName>uk.gov.dstl.baleen.types.Base</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>target</name>
+          <description>The target entity (last entity in the sentence)</description>
+          <rangeTypeName>uk.gov.dstl.baleen.types.Base</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>words</name>
+          <description>The normal form for this lemma.</description>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>      
   </types>
 </typeSystemDescription>
