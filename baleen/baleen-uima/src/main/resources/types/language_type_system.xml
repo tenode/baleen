@@ -96,5 +96,27 @@ This XML file classified as UK OFFICIAL.</description>
         </featureDescription>
       </features>
     </typeDescription>
+  <typeDescription>
+      <name>uk.gov.dstl.baleen.types.language.Dependency</name>
+      <description>Grammatical dependencies between wordtokens, as output from a Dependency Grammar Parser</description>
+      <supertypeName>uk.gov.dstl.baleen.types.Base</supertypeName>
+      <features>
+        <featureDescription>
+          <name>governor</name>
+          <description>Governor of the dependency</description>
+          <rangeTypeName>uk.gov.dstl.baleen.types.language.WordToken</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>dependent</name>
+          <description>Dependent of the dependency</description>
+          <rangeTypeName>uk.gov.dstl.baleen.types.language.WordToken</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>dependencyType</name>
+          <description>The type of grammatical dependency (eg ROOT, VBMOD, etc)</description>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
   </types>
 </typeSystemDescription>
