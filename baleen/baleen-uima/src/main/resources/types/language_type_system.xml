@@ -141,5 +141,25 @@ This XML file classified as UK OFFICIAL.</description>
         </featureDescription>
       </features>
     </typeDescription>      
+  <typeDescription>
+      <name>uk.gov.dstl.baleen.types.language.Interaction</name>
+      <description>A word which acts as a relation in a sentence (eg 'saw' in the 'John saw the car').</description>
+      <supertypeName>uk.gov.dstl.baleen.types.BaleenAnnotation</supertypeName>
+      <featureDescription>
+        <name>value</name>
+        <description>The value of the relationship, typically the spanning text within the sentence or the .</description>
+        <rangeTypeName>uima.cas.String</rangeTypeName>
+      </featureDescription>
+      <featureDescription>
+        <name>relationshipType</name>
+        <description>Denotes the semantic type of the relationship between entities.</description>
+        <rangeTypeName>uima.cas.String</rangeTypeName>
+      </featureDescription>        
+      <featureDescription>
+        <name>relationSubType</name>
+        <description>Used to record any sub-type information for the relation, for example the sub-relations defined within the ACE dataset.</description>
+        <rangeTypeName>uima.cas.String</rangeTypeName>
+      </featureDescription>      
+    </typeDescription>
   </types>
 </typeSystemDescription>

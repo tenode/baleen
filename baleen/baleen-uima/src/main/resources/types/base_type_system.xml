@@ -70,5 +70,17 @@ This XML file classified as UK OFFICIAL.</description>
         </featureDescription>
       </features>
     </typeDescription>
+  <typeDescription>
+      <name>uk.gov.dstl.baleen.types.Pointer</name>
+      <description>A pointer to another annotation in the same document. Designed for general use (eg temporary working inside annotator) rather than having some specific semantic meaning (eg like coreference).</description>
+      <supertypeName>uk.gov.dstl.baleen.types.BaleenAnnotation</supertypeName>
+      <features>
+        <featureDescription>
+          <name>target</name>
+          <description>At target annotation to which this pointer refers.</description>
+          <rangeTypeName>uk.gov.dstl.baleen.types.BaleenAnnotation</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
   </types>
 </typeSystemDescription>
