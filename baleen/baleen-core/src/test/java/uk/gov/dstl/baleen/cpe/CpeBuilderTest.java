@@ -18,7 +18,7 @@ import uk.gov.dstl.baleen.core.pipelines.PipelineTestHelper;
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 /**
- * 
+ *
  */
 public class CpeBuilderTest {
 	private static final String PIPELINE = "test_pipeline";
@@ -49,14 +49,16 @@ public class CpeBuilderTest {
 		assertEquals(GREEN, cp1.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COLOR));
 		assertEquals("7", cp1.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
 		assertEquals(PIPELINE, cp0.getConfigParameterValue(CpeBuilder.PIPELINE_NAME));
-		assertEquals("annotator:uk.gov.dstl.baleen.testing.DummyAnnotator1 (2)", cp1.getAnalysisEngineMetaData().getName());
+		assertEquals("annotator:uk.gov.dstl.baleen.testing.DummyAnnotator1 (2)",
+				cp1.getAnalysisEngineMetaData().getName());
 
 		AnalysisEngine cp2 = (AnalysisEngine) cpe.getCasProcessors()[2];
 		assertEquals(RED, cp2.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COLOR));
 		assertEquals("7", cp2.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
 		assertEquals(PIPELINE, cp0.getConfigParameterValue(CpeBuilder.PIPELINE_NAME));
-		assertEquals("annotator:uk.gov.dstl.baleen.testing.DummyAnnotator1 (3)", cp2.getAnalysisEngineMetaData().getName());
-		
+		assertEquals("annotator:uk.gov.dstl.baleen.testing.DummyAnnotator1 (3)",
+				cp2.getAnalysisEngineMetaData().getName());
+
 		AnalysisEngine cp3 = (AnalysisEngine) cpe.getCasProcessors()[3];
 		assertEquals(RED, cp3.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COLOR));
 		assertEquals("6", cp3.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
@@ -70,74 +72,82 @@ public class CpeBuilderTest {
 		assertEquals(PIPELINE, cp0.getConfigParameterValue(CpeBuilder.PIPELINE_NAME));
 		assertEquals("consumer:uk.gov.dstl.baleen.testing.DummyConsumer", cp4.getAnalysisEngineMetaData().getName());
 	}
-	
+
 	@Test
 	public void testNoValidAnnotators() throws Exception {
 		URL url = CpeBuilderTest.class.getResource("erroneousConfig1.yaml");
 		File yamlFile = new File(url.getFile());
-		
-		try{
+
+		try {
 			CpeBuilder builder = new CpeBuilder(PIPELINE, yamlFile);
 			assertNotNull(builder);
-			
+			builder.build();
+
 			fail("CpeBuilder didn't throw expected exception - invalid annotators");
-		}catch(BaleenException be){
+		} catch (BaleenException be) {
 			assertEquals("You must have at least one valid annotator or consumer", be.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testNoValidCollectionReader() throws Exception {
 		URL url = CpeBuilderTest.class.getResource("erroneousConfig2.yaml");
 		File yamlFile = new File(url.getFile());
-		
-		try{
+
+		try {
 			CpeBuilder builder = new CpeBuilder(PIPELINE, yamlFile);
+
 			assertNotNull(builder);
-			
+			builder.build();
+
 			fail("CpeBuilder didn't throw expected exception - invalid cr");
-		}catch(BaleenException be){
+		} catch (BaleenException be) {
 			assertEquals("No class specified for Collection Reader, or unable to parse", be.getMessage());
 		}
-		
+
 		url = CpeBuilderTest.class.getResource("erroneousConfig3.yaml");
 		yamlFile = new File(url.getFile());
-		
-		try{
+
+		try {
 			CpeBuilder builder = new CpeBuilder(PIPELINE, yamlFile);
 			assertNotNull(builder);
-			
+			builder.build();
+
 			fail("CpeBuilder didn't throw expected exception - invalid cr on config3");
-		}catch(BaleenException be){
-			assertEquals("Could not find or instantiate analysis engine uk.gov.dstl.baleen.testing.MissingCollectionReader", be.getMessage());
+		} catch (BaleenException be) {
+			assertEquals(
+					"Could not find or instantiate analysis engine uk.gov.dstl.baleen.testing.MissingCollectionReader",
+					be.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testPartiallyCorrectConfig() throws Exception {
 		URL url = CpeBuilderTest.class.getResource("erroneousConfig4.yaml");
 		File yamlFile = new File(url.getFile());
-		
+
 		CpeBuilder builder = new CpeBuilder(PIPELINE, yamlFile);
+		builder.build();
 		assertEquals(3, builder.getCPE().getCasProcessors().length);
 	}
-	
+
 	@Test
-	public void testResourcePipeline() throws BaleenException{
+	public void testResourcePipeline() throws BaleenException {
 		BaleenPipelineManager manager = new BaleenPipelineManager();
 		manager.start();
-		
-		CollectionProcessingEngine cpe = PipelineTestHelper.createCpe(PIPELINE, PipelineTestHelper.getCpeWithExternalResourceYamlResource());
+
+		CollectionProcessingEngine cpe = PipelineTestHelper.createCpe(PIPELINE,
+				PipelineTestHelper.getCpeWithExternalResourceYamlResource());
 
 		manager.create(PIPELINE, cpe);
 		manager.startAll();
-		
+
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			// Do nothing
 		}
-		
+
 		manager.stop();
 	}
 }

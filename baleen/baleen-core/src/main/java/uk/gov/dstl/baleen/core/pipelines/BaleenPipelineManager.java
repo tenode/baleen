@@ -53,7 +53,7 @@ public class BaleenPipelineManager extends AbstractCpeManager<BaleenPipeline> {
 	@Override
 	protected CollectionProcessingEngine createNewCpe(String name, String yaml) throws BaleenException {
 		CpeBuilder builder = new CpeBuilder(name, yaml);
-		return builder.getCPE();
+		return builder.build();
 	}
 
 }

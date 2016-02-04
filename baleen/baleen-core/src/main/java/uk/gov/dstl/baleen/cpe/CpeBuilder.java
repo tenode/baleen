@@ -4,40 +4,21 @@ package uk.gov.dstl.baleen.cpe;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.uima.analysis_component.AnalysisComponent;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
-import org.apache.uima.collection.CollectionProcessingEngine;
-import org.apache.uima.collection.CollectionReader;
 import org.apache.uima.collection.CollectionReaderDescription;
-import org.apache.uima.fit.descriptor.ExternalResource;
-import org.apache.uima.fit.factory.AnalysisEngineFactory;
-import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.apache.uima.fit.factory.ExternalResourceFactory;
 import org.apache.uima.resource.ExternalResourceDescription;
-import org.apache.uima.resource.Resource;
-import org.apache.uima.resource.ResourceInitializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yaml.snakeyaml.Yaml;
-
-import com.google.common.io.Files;
 
 import uk.gov.dstl.baleen.core.history.BaleenHistory;
 import uk.gov.dstl.baleen.core.history.logging.LoggingBaleenHistory;
-import uk.gov.dstl.baleen.core.utils.YamlConfiguration;
 import uk.gov.dstl.baleen.exceptions.BaleenException;
-import uk.gov.dstl.baleen.exceptions.MissingParameterException;
 
 /**
  * This class provides methods to convert a Baleen YAML configuration file into a
@@ -118,29 +99,12 @@ import uk.gov.dstl.baleen.exceptions.MissingParameterException;
  *
  */
 @SuppressWarnings("unchecked")
-public class CpeBuilder {
+public class CpeBuilder extends AbstractCpeBuilder {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CpeBuilder.class);
 
-	private static final String CLASS = "class";
-	public static final String PIPELINE_NAME = "__pipelineName";
 	public static final String BALEEN_HISTORY = "__baleenHistory";
 
 	public static final String MERGE_DISTINCT_ENTITIES = "history.mergeDistinctEntities";
-
-	public static final String ANNOTATOR_DEFAULT_PACKAGE = "uk.gov.dstl.baleen.annotators";
-	public static final String CONSUMER_DEFAULT_PACKAGE = "uk.gov.dstl.baleen.consumers";
-	public static final String READER_DEFAULT_PACKAGE = "uk.gov.dstl.baleen.collectionreaders";
-
-	private final Map<String, Object> globalConfig = new HashMap<>();
-	private Object collectionReaderConfig = new HashMap<>();
-	private List<Object> annotatorsConfig = new ArrayList<>();
-	private List<Object> consumersConfig = new ArrayList<>();
-
-	private final Map<String, ExternalResourceDescription> resourceDescriptors = new HashMap<>();
-
-	private final List<String> ignoreParams = new ArrayList<>(Arrays.asList(CLASS));
-
-	private CollectionProcessingEngine cpe = null;
 
 	/**
 	 * Initiate a CpeBuilder with a YAML configuration file
@@ -152,11 +116,7 @@ public class CpeBuilder {
 	 * @throws IOException
 	 */
 	public CpeBuilder(String pipelineName, File yamlFile) throws BaleenException {
-		try {
-			createPipeline(pipelineName, Files.toString(yamlFile, StandardCharsets.UTF_8));
-		} catch (IOException e) {
-			throw new BaleenException(e);
-		}
+		super(pipelineName, yamlFile);
 	}
 
 	/**
@@ -170,11 +130,7 @@ public class CpeBuilder {
 	 *             if the input stream can not be read
 	 */
 	public CpeBuilder(String pipelineName, InputStream inputStream) throws BaleenException {
-		try {
-			createPipeline(pipelineName, IOUtils.toString(inputStream));
-		} catch (IOException e) {
-			throw new BaleenException(e);
-		}
+		super(pipelineName, inputStream);
 	}
 
 	/**
@@ -186,71 +142,28 @@ public class CpeBuilder {
 	 *            A string containing the configuration
 	 */
 	public CpeBuilder(String pipelineName, String yamlString) throws BaleenException {
-		createPipeline(pipelineName, yamlString);
+		super(pipelineName, yamlString);
 	}
 
-	/**
-	 * Create a pipeline from YAML string
-	 *
-	 * @param pipelineName
-	 *            the pipeline name
-	 * @param yamlString
-	 *            the YAML containing configuration
-	 * @throws BaleenException
-	 */
-	private void createPipeline(String pipelineName, String yamlString)
-			throws BaleenException {
-		Yaml yaml = new Yaml();
-		String cleanYaml = YamlConfiguration.cleanTabs(yamlString);
-		Map<String, Object> config = (Map<String, Object>) yaml.load(cleanYaml);
-		createPipeline(pipelineName, config);
-	}
-
-	/**
-	 * Get the built CPE
-	 *
-	 * @return The CollectionProcessingEngine that has been configured based on the current
-	 *         configuration
-	 */
-	public CollectionProcessingEngine getCPE() {
-		return cpe;
-	}
-
-	/**
-	 * Load YAML file into a series of Maps for the different components
-	 *
-	 * @param config
-	 *            The map, loaded from a YAML file, to extract into the separate variables
-	 */
-	private void yamlToMaps(Map<String, Object> config) throws MissingParameterException {
-		if (config == null) {
-			throw new MissingParameterException("No configuration provided");
-		}
+	@Override
+	protected void configure(String pipelineName, Map<String, Object> config) throws BaleenException {
+		configureHistory();
 
 		Object cr = config.remove("collectionreader");
-		if (cr == null) {
-			throw new MissingParameterException("No collection reader specified");
-		} else {
-			collectionReaderConfig = cr;
+		if (cr != null) {
+			createCollectionReader(cr);
 		}
 
 		Object a = config.remove("annotators");
-		if (a != null) {
-			annotatorsConfig = (List<Object>) a;
+		if (a != null && a instanceof List) {
+			createAnnotators((List<Object>) a);
 		}
 
 		Object c = config.remove("consumers");
-		if (c != null) {
-			consumersConfig = (List<Object>) c;
+		if (c != null && c instanceof List) {
+			createConsumers((List<Object>) c);
 		}
 
-		for (String key : config.keySet()) {
-			// Flatten global configuration
-			Map<String, Object> subconfig = (Map<String, Object>) config.get(key);
-			for (String subkey : subconfig.keySet()) {
-				globalConfig.put(key + "." + subkey, subconfig.get(subkey));
-			}
-		}
 	}
 
 	/**
@@ -258,7 +171,7 @@ public class CpeBuilder {
 	 *
 	 * @return A configured CollectionReaderDescription
 	 */
-	private CollectionReaderDescription createCollectionReader() throws BaleenException {
+	private void createCollectionReader(Object collectionReaderConfig) throws BaleenException {
 		String crClassName = null;
 		Map<String, Object> params = Collections.emptyMap();
 
@@ -270,19 +183,20 @@ public class CpeBuilder {
 			params = reader;
 		}
 
+		// This is also done by the createCollectionReader but this is backward compatible with the
+		// tests
+
 		if (crClassName == null || crClassName.isEmpty()) {
-			throw new MissingParameterException("No class specified for Collection Reader, or unable to parse");
+			throw new BaleenException("No class specified for Collection Reader, or unable to parse");
 		}
 
-		Class<? extends CollectionReader> crClass = CpeBuilderUtils.getClassFromString(crClassName,
-				READER_DEFAULT_PACKAGE);
-		Map<String, ExternalResourceDescription> crResources = getResources(crClass);
-		Object[] crParams = CpeBuilderUtils.mergeAndExtractParams(globalConfig, params, ignoreParams, crResources);
-
-		try {
-			return CollectionReaderFactory.createReaderDescription(crClass, crParams);
-		} catch (ResourceInitializationException rie) {
-			throw new BaleenException("Couldn't initialize collection reader", rie);
+		Optional<CollectionReaderDescription> desc = createCollectionReader(crClassName, params);
+		if (desc.isPresent()) {
+			setCollectorReader(desc.get());
+		} else {
+			// Whilst this would be caught by the build() process throwing an exception here is
+			// compatible with existing Baleen tests.
+			throw new BaleenException(String.format("Could not find or instantiate analysis engine %s", crClassName));
 		}
 	}
 
@@ -292,9 +206,7 @@ public class CpeBuilder {
 	 * @return A map containing the Annotator Name as the key and the AnalysisEngineDescription as
 	 *         the value
 	 */
-	private Map<String, AnalysisEngineDescription> createAnnotators() {
-		Map<String, AnalysisEngineDescription> annotators = new LinkedHashMap<String, AnalysisEngineDescription>();
-
+	private void createAnnotators(List<Object> annotatorsConfig) {
 		for (Object objAnnotator : annotatorsConfig) {
 			String aClassName = null;
 			Map<String, Object> params = Collections.emptyMap();
@@ -307,29 +219,14 @@ public class CpeBuilder {
 				params = annotator;
 			}
 
-			if (aClassName == null || aClassName.isEmpty()) {
-				LOGGER.warn(
-						"No class name provided for annotator, or unable to parse list item - analysis engine will be skipped");
-				continue;
+			Optional<AnalysisEngineDescription> desc = createAnnotator(aClassName, params);
+			if (desc.isPresent()) {
+				String name = CpeBuilderUtils.getComponentName(getAnnotatorNames(), "annotator:" + aClassName);
+				addAnnotator(name, desc.get());
 			}
 
-			try {
-				Class<? extends AnalysisComponent> aClass = CpeBuilderUtils.getClassFromString(aClassName,
-						ANNOTATOR_DEFAULT_PACKAGE);
-				Map<String, ExternalResourceDescription> aResources = getResources(aClass);
-				Object[] aParams = CpeBuilderUtils.mergeAndExtractParams(globalConfig, params, ignoreParams,
-						aResources);
-
-				AnalysisEngineDescription ae = AnalysisEngineFactory.createEngineDescription(aClass, aParams);
-				String name = CpeBuilderUtils.getComponentName(annotators.keySet(), "annotator:" + aClassName);
-
-				annotators.put(name, ae);
-			} catch (BaleenException | ResourceInitializationException e) {
-				LOGGER.warn("Failed to build annotator description - analysis engine will be skipped", e);
-			}
 		}
 
-		return annotators;
 	}
 
 	/**
@@ -338,9 +235,7 @@ public class CpeBuilder {
 	 * @return A map containing the Consumer Name as the key and the AnalysisEngineDescription as
 	 *         the value
 	 */
-	private Map<String, AnalysisEngineDescription> createConsumers() {
-		Map<String, AnalysisEngineDescription> consumers = new LinkedHashMap<String, AnalysisEngineDescription>();
-
+	private void createConsumers(List<Object> consumersConfig) {
 		for (Object objConsumer : consumersConfig) {
 			String cClassName = null;
 			Map<String, Object> params = Collections.emptyMap();
@@ -353,113 +248,17 @@ public class CpeBuilder {
 				params = consumer;
 			}
 
-			if (cClassName == null || cClassName.isEmpty()) {
-				LOGGER.warn(
-						"No class name provided for consumer, or unable to parse list item - analysis engine will be skipped");
-				continue;
+			Optional<AnalysisEngineDescription> desc = createConsumer(cClassName, params);
+			if (desc.isPresent()) {
+				String name = CpeBuilderUtils.getComponentName(getConsumerNames(), "consumer:" + cClassName);
+				addConsumer(name, desc.get());
 			}
 
-			try {
-				Class<? extends AnalysisComponent> cClass = CpeBuilderUtils.getClassFromString(cClassName,
-						CONSUMER_DEFAULT_PACKAGE);
-				Map<String, ExternalResourceDescription> cResources = getResources(cClass);
-				Object[] cParams = CpeBuilderUtils.mergeAndExtractParams(globalConfig, params, ignoreParams,
-						cResources);
-
-				AnalysisEngineDescription ae = AnalysisEngineFactory.createEngineDescription(cClass, cParams);
-				String name = CpeBuilderUtils.getComponentName(consumers.keySet(), "consumer:" + cClassName);
-
-				consumers.put(name, ae);
-			} catch (BaleenException | ResourceInitializationException e) {
-				LOGGER.warn("Failed to build consumer description - analysis engine will be skipped", e);
-			}
 		}
-
-		return consumers;
-	}
-
-	/**
-	 * Take the components previously created and create a single pipeline from them
-	 *
-	 * @param collectionReader
-	 *            Collection reader descriptor
-	 * @param analysisEngines
-	 *            Map of analysis engine names and descriptors
-	 * @return A CollectionProcessingEngine containing the specified components
-	 */
-	private CollectionProcessingEngine buildCPE(CollectionReaderDescription collectionReader,
-			Map<String, AnalysisEngineDescription> analysisEngines) throws BaleenException {
-		// Build aggregate engine to contain all annotators
-		AnalysisEngineDescription cpeAEs = null;
-		try {
-			List<String> names = new ArrayList<>();
-			names.addAll(analysisEngines.keySet());
-
-			List<AnalysisEngineDescription> engines = new ArrayList<>();
-			engines.addAll(analysisEngines.values());
-
-			cpeAEs = AnalysisEngineFactory.createEngineDescription(engines, names, null, null, null);
-		} catch (ResourceInitializationException rie) {
-			throw new BaleenException("Couldn't create aggregate analysis engine", rie);
-		}
-
-		// Build Collection Processing Engine
-		org.apache.uima.fit.cpe.CpeBuilder builder = new org.apache.uima.fit.cpe.CpeBuilder();
-
-		try {
-			builder.setReader(collectionReader);
-			builder.setAnalysisEngine(cpeAEs);
-		} catch (Exception e) {
-			throw new BaleenException("Couldn't build Collection Processing Engine", e);
-		}
-
-		CollectionProcessingEngine ret;
-		try {
-			ret = builder.createCpe(null);
-		} catch (Exception e) {
-			throw new BaleenException("Couldn't create CPE", e);
-		}
-
-		return ret;
-	}
-
-	/**
-	 * Create pipeline from a configuration map
-	 *
-	 * @param pipelineName
-	 *            The name of the pipeline
-	 * @param config
-	 *            A map of configuration keys to objects
-	 */
-	private void createPipeline(String pipelineName, Map<String, Object> config) throws BaleenException {
-		// Load configuration
-		yamlToMaps(config);
-		globalConfig.put(PIPELINE_NAME, pipelineName);
-
-		configureHistory();
-
-		// Create CollectionReader
-		CollectionReaderDescription collectionReader = createCollectionReader();
-
-		// Create Annotators
-		Map<String, AnalysisEngineDescription> annotators = createAnnotators();
-
-		// Create Consumers
-		Map<String, AnalysisEngineDescription> consumers = createConsumers();
-
-		Map<String, AnalysisEngineDescription> analysisEngines = new LinkedHashMap<>();
-		analysisEngines.putAll(annotators);
-		analysisEngines.putAll(consumers);
-
-		if (analysisEngines.isEmpty()) {
-			throw new BaleenException("You must have at least one valid annotator or consumer");
-		}
-
-		cpe = buildCPE(collectionReader, analysisEngines);
 	}
 
 	private void configureHistory() {
-		String historyClass = (String) globalConfig.get("history.class");
+		String historyClass = (String) getGlobalConfig("history.class");
 
 		Class<? extends BaleenHistory> clazz = null;
 
@@ -478,51 +277,11 @@ public class CpeBuilder {
 			LOGGER.info("Using the default history implementation {}", clazz.getCanonicalName());
 		}
 
-		Object[] params = CpeBuilderUtils.extractParams(globalConfig, ignoreParams, getResources(clazz));
+		Object[] params = CpeBuilderUtils.extractParams(getGlobalConfig(), getIgnoreParams(),
+				getOrCreateResources(clazz));
 		ExternalResourceDescription erd = ExternalResourceFactory.createExternalResourceDescription(BALEEN_HISTORY,
 				clazz, params);
-		resourceDescriptors.put(BALEEN_HISTORY, erd);
+		addResource(BALEEN_HISTORY, erd);
 	}
 
-	/**
-	 * Look at the specified class and identify any resources that need including. If resources are
-	 * found, then first try to use an existing instance of that resource before creating a new one
-	 *
-	 * @param clazz
-	 *            The class to test
-	 * @return A map of all the ExternalResourceDescriptions needed by the class
-	 */
-	private Map<String, ExternalResourceDescription> getResources(Class<?> clazz) {
-		Map<String, ExternalResourceDescription> ret = new HashMap<>();
-
-		List<Field> fields = new ArrayList<>();
-
-		Class<?> c = clazz;
-		while (c != null && c != Object.class) {
-			fields.addAll(Arrays.asList(c.getDeclaredFields()));
-			c = c.getSuperclass();
-		}
-
-		for (Field f : fields) {
-			if (f.isAnnotationPresent(ExternalResource.class) && Resource.class.isAssignableFrom(f.getType())) {
-				ExternalResource annotation = f.getAnnotation(ExternalResource.class);
-				String key = annotation.key();
-
-				ExternalResourceDescription erd;
-				if (resourceDescriptors.containsKey(key)) {
-					erd = resourceDescriptors.get(key);
-				} else {
-					Map<String, ExternalResourceDescription> erds = getResources(f.getType());
-					Object[] params = CpeBuilderUtils.extractParams(globalConfig, ignoreParams, erds);
-					erd = ExternalResourceFactory.createExternalResourceDescription(key,
-							(Class<? extends Resource>) f.getType(), params);
-					resourceDescriptors.put(key, erd);
-				}
-
-				ret.put(key, erd);
-			}
-		}
-
-		return ret;
-	}
 }

@@ -15,11 +15,11 @@ import uk.gov.dstl.baleen.exceptions.BaleenException;
 /**
  * Helpers for creating dummy data for pipelines
  *
- * 
+ *
  *
  */
 public class PipelineTestHelper {
-	
+
 	private PipelineTestHelper() {
 		// Do nothing
 	}
@@ -29,22 +29,21 @@ public class PipelineTestHelper {
 	 *
 	 * @return
 	 * @throws BaleenException
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static CollectionProcessingEngine createCpe(String name) throws BaleenException {
 		return createCpe(name, getCpeYamlResource());
 	}
-	
+
 	public static CollectionProcessingEngine createCpe(String name, URL url) throws BaleenException {
 		File yamlFile = new File(url.getFile());
 		CpeBuilder builder = new CpeBuilder(name, yamlFile);
-		return builder.getCPE();
+		return builder.build();
 	}
 
 	public static URL getCpeYamlResource() {
 		return CpeBuilderTest.class.getResource("dummyConfig.yaml");
 	}
-	
 
 	public static String getCpeYamlResourceAsString() throws IOException {
 		return IOUtils.toString(CpeBuilderTest.class.getResourceAsStream("resourceConfig.yaml"));
