@@ -40,7 +40,7 @@ import uk.gov.dstl.baleen.exceptions.BaleenException;
  * will need to be added manually.
  *
  * For details of the format of the pipeline configuration YAML files, see
- * {@link uk.gov.dstl.baleen.cpe.CpeBuilder}.
+ * {@link uk.gov.dstl.baleen.cpe.PipelineCpeBuilder}.
  *
  */
 public abstract class AbstractCpeManager<T extends AbstractCpeController> extends AbstractBaleenComponent {

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import uk.gov.dstl.baleen.core.web.security.WebPermission;
-import uk.gov.dstl.baleen.cpe.CpeBuilder;
+import uk.gov.dstl.baleen.cpe.PipelineCpeBuilder;
 
 /**
  * List all consumers (inheriting from BaleenConsumer) on the class path
@@ -23,7 +23,7 @@ public class ConsumersServlet extends AbstractComponentApiServlet{
 	 */
 	public ConsumersServlet(){
 		super(CONSUMER_CLASS,
-				CpeBuilder.CONSUMER_DEFAULT_PACKAGE,
+				PipelineCpeBuilder.CONSUMER_DEFAULT_PACKAGE,
 				Collections.emptyList(),
 				Arrays.asList(".*\\.internals", ".*\\.helpers"),
 				ConsumersServlet.class);

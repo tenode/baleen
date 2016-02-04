@@ -99,8 +99,8 @@ import uk.gov.dstl.baleen.exceptions.BaleenException;
  *
  */
 @SuppressWarnings("unchecked")
-public class CpeBuilder extends AbstractCpeBuilder {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CpeBuilder.class);
+public class PipelineCpeBuilder extends AbstractCpeBuilder {
+	private static final Logger LOGGER = LoggerFactory.getLogger(PipelineCpeBuilder.class);
 
 	public static final String BALEEN_HISTORY = "__baleenHistory";
 
@@ -115,7 +115,7 @@ public class CpeBuilder extends AbstractCpeBuilder {
 	 *            The file containing the configuration
 	 * @throws IOException
 	 */
-	public CpeBuilder(String pipelineName, File yamlFile) throws BaleenException {
+	public PipelineCpeBuilder(String pipelineName, File yamlFile) throws BaleenException {
 		super(pipelineName, yamlFile);
 	}
 
@@ -129,7 +129,7 @@ public class CpeBuilder extends AbstractCpeBuilder {
 	 * @throws IOException
 	 *             if the input stream can not be read
 	 */
-	public CpeBuilder(String pipelineName, InputStream inputStream) throws BaleenException {
+	public PipelineCpeBuilder(String pipelineName, InputStream inputStream) throws BaleenException {
 		super(pipelineName, inputStream);
 	}
 
@@ -141,7 +141,7 @@ public class CpeBuilder extends AbstractCpeBuilder {
 	 * @param yamlString
 	 *            A string containing the configuration
 	 */
-	public CpeBuilder(String pipelineName, String yamlString) throws BaleenException {
+	public PipelineCpeBuilder(String pipelineName, String yamlString) throws BaleenException {
 		super(pipelineName, yamlString);
 	}
 

@@ -34,7 +34,7 @@ import uk.gov.dstl.baleen.core.history.DocumentHistory;
 import uk.gov.dstl.baleen.core.history.HistoryEvent;
 import uk.gov.dstl.baleen.core.history.HistoryEvents;
 import uk.gov.dstl.baleen.core.history.memory.InMemoryBaleenHistory;
-import uk.gov.dstl.baleen.cpe.CpeBuilder;
+import uk.gov.dstl.baleen.cpe.PipelineCpeBuilder;
 import uk.gov.dstl.baleen.resources.SharedFongoResource;
 import uk.gov.dstl.baleen.types.common.Buzzword;
 import uk.gov.dstl.baleen.types.common.CommsIdentifier;
@@ -94,16 +94,16 @@ public class MongoTest extends ConsumerTestBase {
 	public void setUp() throws ResourceInitializationException, ResourceAccessException {
 		// Create a description of an external resource - a fongo instance, in the same way we would have created a shared mongo resource
 		ExternalResourceDescription erd = ExternalResourceFactory.createExternalResourceDescription(MONGO, SharedFongoResource.class, "fongo.collection", "test", "fongo.data", "[]");
-		ExternalResourceDescription historyErd = ExternalResourceFactory.createExternalResourceDescription(CpeBuilder.BALEEN_HISTORY, InMemoryBaleenHistory.class);
+		ExternalResourceDescription historyErd = ExternalResourceFactory.createExternalResourceDescription(PipelineCpeBuilder.BALEEN_HISTORY, InMemoryBaleenHistory.class);
 
 		history = Mockito.mock(BaleenHistory.class);
 
 		// Create the analysis engine
-		AnalysisEngineDescription aed = AnalysisEngineFactory.createEngineDescription(Mongo.class, MONGO, erd, "collection", "test", CpeBuilder.BALEEN_HISTORY, historyErd, "outputHistory", Boolean.TRUE);
+		AnalysisEngineDescription aed = AnalysisEngineFactory.createEngineDescription(Mongo.class, MONGO, erd, "collection", "test", PipelineCpeBuilder.BALEEN_HISTORY, historyErd, "outputHistory", Boolean.TRUE);
 		ae = AnalysisEngineFactory.createEngine(aed);
 		ae.initialize(new CustomResourceSpecifier_impl(), Collections.emptyMap());
 		SharedFongoResource sfr = (SharedFongoResource) ae.getUimaContext().getResourceObject(MONGO);
-		history = (BaleenHistory) ae.getUimaContext().getResourceObject(CpeBuilder.BALEEN_HISTORY);
+		history = (BaleenHistory) ae.getUimaContext().getResourceObject(PipelineCpeBuilder.BALEEN_HISTORY);
 
 		entities = sfr.getDB().getCollection("entities");
 		documents = sfr.getDB().getCollection("documents");

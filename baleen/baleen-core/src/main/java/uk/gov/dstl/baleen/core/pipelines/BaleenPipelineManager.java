@@ -6,7 +6,7 @@ import java.io.File;
 import org.apache.uima.collection.CollectionProcessingEngine;
 
 import uk.gov.dstl.baleen.cpe.AbstractCpeManager;
-import uk.gov.dstl.baleen.cpe.CpeBuilder;
+import uk.gov.dstl.baleen.cpe.PipelineCpeBuilder;
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 /**
@@ -29,7 +29,7 @@ import uk.gov.dstl.baleen.exceptions.BaleenException;
  * will need to be added manually.
  *
  * For details of the format of the pipeline configuration YAML files, see
- * {@link uk.gov.dstl.baleen.cpe.CpeBuilder}.
+ * {@link uk.gov.dstl.baleen.cpe.PipelineCpeBuilder}.
  *
  *
  *
@@ -52,7 +52,7 @@ public class BaleenPipelineManager extends AbstractCpeManager<BaleenPipeline> {
 
 	@Override
 	protected CollectionProcessingEngine createNewCpe(String name, String yaml) throws BaleenException {
-		CpeBuilder builder = new CpeBuilder(name, yaml);
+		PipelineCpeBuilder builder = new PipelineCpeBuilder(name, yaml);
 		return builder.build();
 	}
 
