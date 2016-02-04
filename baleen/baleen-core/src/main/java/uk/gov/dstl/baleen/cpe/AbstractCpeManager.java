@@ -42,8 +42,6 @@ import uk.gov.dstl.baleen.exceptions.BaleenException;
  * For details of the format of the pipeline configuration YAML files, see
  * {@link uk.gov.dstl.baleen.cpe.CpeBuilder}.
  *
- *
- *
  */
 public abstract class AbstractCpeManager<T extends AbstractCpeController> extends AbstractBaleenComponent {
 
@@ -76,7 +74,7 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 *
 	 * @return number of controllers
 	 */
-	public int getPipelineCount() {
+	public int getCount() {
 		return controllers.size();
 	}
 
@@ -99,7 +97,7 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 			} else {
 				try {
 					LOGGER.info("Attempting to create {}", name);
-					createPipeline(name, new File(file));
+					create(name, new File(file));
 				} catch (Exception e) {
 					LOGGER.warn("Unable to create called {} from file {} ", name, file, e);
 				}
@@ -123,7 +121,7 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	public void stop() throws BaleenException {
 		LOGGER.info("Stopping manager, and removing instances");
 		try {
-			stopAllPipelines();
+			stopAll();
 		} finally {
 			controllers.clear();
 		}
@@ -135,7 +133,7 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 *
 	 * @return unmodified set of names.
 	 */
-	public Set<String> getPipelineNames() {
+	public Set<String> getNames() {
 		return Collections.unmodifiableSet(controllers.keySet());
 	}
 
@@ -144,7 +142,7 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 *
 	 * @return unmodified set of controllers.
 	 */
-	public Collection<T> getPipelines() {
+	public Collection<T> getAll() {
 		return Collections.unmodifiableCollection(controllers.values());
 	}
 
@@ -152,7 +150,7 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 * Start all the controllers in this manager.
 	 *
 	 */
-	public void startAllPipelines() {
+	public void startAll() {
 		LOGGER.info("Starting all {}", typeName);
 		controllers.entrySet().stream().forEach(e -> {
 			try {
@@ -167,7 +165,7 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 * Pause all the controllers in the manager.
 	 *
 	 */
-	public void pauseAllPipelines() {
+	public void pauseAll() {
 		LOGGER.info("Stopping all {}", typeName);
 		controllers.values().forEach(controller -> controller.pause());
 	}
@@ -176,7 +174,7 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 * Stop all the controllers in the manager.
 	 *
 	 */
-	public void stopAllPipelines() {
+	public void stopAll() {
 		LOGGER.info("Stopping all {}", typeName);
 		controllers.values().forEach(controller -> controller.stop());
 	}
@@ -187,7 +185,7 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 * @param name
 	 * @return
 	 */
-	public Optional<T> getPipeline(String name) {
+	public Optional<T> get(String name) {
 		return Optional.ofNullable(controllers.get(name));
 	}
 
@@ -199,8 +197,8 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 * @return
 	 * @throws BaleenException
 	 */
-	public T createPipeline(String name, CollectionProcessingEngine engine) throws BaleenException {
-		return createPipeline(name, null, null, engine);
+	public T create(String name, CollectionProcessingEngine engine) throws BaleenException {
+		return create(name, null, null, engine);
 	}
 
 	/**
@@ -212,9 +210,9 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 * @return
 	 * @throws BaleenException
 	 */
-	public T createPipeline(String name, File source, String yaml, CollectionProcessingEngine engine)
+	public T create(String name, File source, String yaml, CollectionProcessingEngine engine)
 			throws BaleenException {
-		if (hasPipeline(name)) {
+		if (has(name)) {
 			throw new BaleenException(typeName + "of that name already exists");
 		}
 
@@ -238,9 +236,9 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 * @return
 	 * @throws BaleenException
 	 */
-	public T createPipeline(String name, InputStream yaml) throws BaleenException {
+	public T create(String name, InputStream yaml) throws BaleenException {
 		try {
-			return createPipeline(name, null, IOUtils.toString(yaml));
+			return create(name, null, IOUtils.toString(yaml));
 		} catch (IOException e) {
 			throw new BaleenException(e);
 		}
@@ -254,9 +252,9 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 * @return
 	 * @throws BaleenException
 	 */
-	public T createPipeline(String name, String yaml) throws BaleenException {
+	public T create(String name, String yaml) throws BaleenException {
 		CpeBuilder builder = new CpeBuilder(name, yaml);
-		return createPipeline(name, null, yaml, builder.getCPE());
+		return create(name, null, yaml, builder.getCPE());
 	}
 
 	/**
@@ -268,9 +266,9 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 * @return
 	 * @throws BaleenException
 	 */
-	public T createPipeline(String name, File source, String yaml) throws BaleenException {
+	public T create(String name, File source, String yaml) throws BaleenException {
 		CpeBuilder builder = new CpeBuilder(name, yaml);
-		return createPipeline(name, source, yaml, builder.getCPE());
+		return create(name, source, yaml, builder.getCPE());
 	}
 
 	/**
@@ -281,9 +279,9 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 * @return
 	 * @throws BaleenException
 	 */
-	public T createPipeline(String name, File file) throws BaleenException {
+	public T create(String name, File file) throws BaleenException {
 		try {
-			return createPipeline(name, file, Files.toString(file, StandardCharsets.UTF_8));
+			return create(name, file, Files.toString(file, StandardCharsets.UTF_8));
 		} catch (IOException e) {
 			throw new BaleenException(e);
 		}
@@ -324,7 +322,7 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 *            the name
 	 * @return true is a controller of that name already exists
 	 */
-	public boolean hasPipeline(String name) {
+	public boolean has(String name) {
 		return controllers.containsKey(name);
 	}
 

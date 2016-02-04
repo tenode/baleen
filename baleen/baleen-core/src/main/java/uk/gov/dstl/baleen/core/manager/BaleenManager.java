@@ -112,7 +112,7 @@ public class BaleenManager {
 		webApi.start();
 
 		LOGGER.info("Starting all pre-configured pipelines");
-		pipelineManager.startAllPipelines();
+		pipelineManager.startAll();
 
 		started = true;
 

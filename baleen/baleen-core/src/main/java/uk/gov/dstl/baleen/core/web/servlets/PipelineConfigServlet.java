@@ -61,7 +61,7 @@ public class PipelineConfigServlet extends AbstractApiServlet {
 			return;
 		}
 
-		Optional<BaleenPipeline> pipeline = manager.getPipeline(name);
+		Optional<BaleenPipeline> pipeline = manager.get(name);
 		if (!pipeline.isPresent()) {
 			respondWithNotFound(resp);
 		} else {

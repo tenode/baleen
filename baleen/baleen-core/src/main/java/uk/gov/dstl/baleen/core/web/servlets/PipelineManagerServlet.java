@@ -104,7 +104,7 @@ public class PipelineManagerServlet extends AbstractApiServlet {
 
 		Collection<BaleenPipeline> list;
 		if (names == null || names.length == 0) {
-			list = manager.getPipelines();
+			list = manager.getAll();
 		} else {
 			list = new LinkedList<>();
 			for (String n : names) {
@@ -112,7 +112,7 @@ public class PipelineManagerServlet extends AbstractApiServlet {
 					continue;
 				}
 
-				Optional<BaleenPipeline> p = manager.getPipeline(n);
+				Optional<BaleenPipeline> p = manager.get(n);
 				if (p.isPresent()) {
 					list.add(p.get());
 				}
@@ -144,7 +144,7 @@ public class PipelineManagerServlet extends AbstractApiServlet {
 		
 		Map<String, String> result = new HashMap<>();
 		for (String name : names) {
-			Optional<BaleenPipeline> pipeline = manager.getPipeline(name);
+			Optional<BaleenPipeline> pipeline = manager.get(name);
 
 			if (pipeline.isPresent()) {
 				BaleenPipeline bp = pipeline.get();
@@ -167,8 +167,8 @@ public class PipelineManagerServlet extends AbstractApiServlet {
 			return createPipelineFromFile(name, f);
 		}else if(bp.getYaml().isPresent()){
 			try{
-				manager.createPipeline(name, bp.getYaml().get());
-				manager.getPipeline(name).get().start();
+				manager.create(name, bp.getYaml().get());
+				manager.get(name).get().start();
 				return RET_RESTARTED;
 			}catch(BaleenException be){
 				LOGGER.error("Unable to recreate pipeline {} from YAML", name, be);
@@ -182,8 +182,8 @@ public class PipelineManagerServlet extends AbstractApiServlet {
 	private String createPipelineFromFile(String name, File f){
 		if(f.exists()){
 			try{
-				manager.createPipeline(name, f);
-				manager.getPipeline(name).get().start();
+				manager.create(name, f);
+				manager.get(name).get().start();
 				return RET_RESTARTED;
 			}catch(BaleenException be){
 				LOGGER.error("Unable to recreate pipeline {} from file", name, be);
@@ -204,7 +204,7 @@ public class PipelineManagerServlet extends AbstractApiServlet {
 
 		List<BaleenPipeline> list = new LinkedList<>();
 		for (String name : names) {
-			Optional<BaleenPipeline> pipeline = manager.getPipeline(name);
+			Optional<BaleenPipeline> pipeline = manager.get(name);
 
 			if (pipeline.isPresent()) {
 
@@ -241,14 +241,14 @@ public class PipelineManagerServlet extends AbstractApiServlet {
 		String yaml = req.getParameter(PARAM_YAML);
 		String start = req.getParameter(PARAM_START);
 
-		if (!parametersPresent(name, yaml) || manager.hasPipeline(name)) {
+		if (!parametersPresent(name, yaml) || manager.has(name)) {
 			respondWithBadArguments(resp);
 			return;
 		}
 
 		BaleenPipeline pipeline;
 		try {
-			pipeline = manager.createPipeline(name, yaml);
+			pipeline = manager.create(name, yaml);
 		} catch (BaleenException e) {
 			LOGGER.error("Unable to create pipeline", e);
 			respondWithError(resp, HttpStatus.BAD_REQUEST_400, "Creation of pipeline from yaml failed");

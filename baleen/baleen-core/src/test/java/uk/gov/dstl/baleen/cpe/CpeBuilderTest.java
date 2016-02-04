@@ -129,8 +129,8 @@ public class CpeBuilderTest {
 		
 		CollectionProcessingEngine cpe = PipelineTestHelper.createCpe(PIPELINE, PipelineTestHelper.getCpeWithExternalResourceYamlResource());
 
-		manager.createPipeline(PIPELINE, cpe);
-		manager.startAllPipelines();
+		manager.create(PIPELINE, cpe);
+		manager.startAll();
 		
 		try {
 			Thread.sleep(3000);

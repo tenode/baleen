@@ -42,7 +42,7 @@ public class BaleenWebApiTest {
 	@Before
 	public void before() {
 		doReturn(pipelineManager).when(baleenManager).getPipelineManager();
-		doReturn(Collections.emptyList()).when(pipelineManager).getPipelines();
+		doReturn(Collections.emptyList()).when(pipelineManager).getAll();
 	}
 
 	@Test
