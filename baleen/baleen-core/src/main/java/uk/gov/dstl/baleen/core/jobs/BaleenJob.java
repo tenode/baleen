@@ -1,5 +1,5 @@
 //Dstl (c) Crown Copyright 2015
-package uk.gov.dstl.baleen.core.pipelines;
+package uk.gov.dstl.baleen.core.jobs;
 
 import java.io.File;
 
@@ -19,10 +19,10 @@ import uk.gov.dstl.baleen.cpe.AbstractCpeController;
  *
  *
  */
-public class BaleenPipeline extends AbstractCpeController {
+public class BaleenJob extends AbstractCpeController {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(BaleenPipeline.class);
+			.getLogger(BaleenJob.class);
 
 	/**
 	 * New instance.
@@ -34,7 +34,7 @@ public class BaleenPipeline extends AbstractCpeController {
 	 * @param engine
 	 *            non-null
 	 */
-	public BaleenPipeline(String name, String yaml,
+	public BaleenJob(String name, String yaml,
 			CollectionProcessingEngine engine) {
 		super(name, yaml, engine);
 	}
@@ -51,7 +51,7 @@ public class BaleenPipeline extends AbstractCpeController {
 	 * @param engine
 	 *            non-null
 	 */
-	public BaleenPipeline(String name, String yaml, File source,
+	public BaleenJob(String name, String yaml, File source,
 			CollectionProcessingEngine engine) {
 		super(name, yaml, source, engine);
 	}
@@ -64,15 +64,15 @@ public class BaleenPipeline extends AbstractCpeController {
 	 * @param engine
 	 *            non-null
 	 */
-	public BaleenPipeline(String name, CollectionProcessingEngine engine) {
-		super(name, engine);
+	public BaleenJob(String name, CollectionProcessingEngine engine) {
+		super(name, null, engine);
 	}
 
 	@Override
 	public void entityProcessComplete(CAS cas, EntityProcessStatus status) {
 		if (status.isException()) {
 			for (Exception e : status.getExceptions()) {
-				LOGGER.warn("Document finished processing with errors", e);
+				LOGGER.warn("Job ran with errors", e);
 			}
 		}
 
