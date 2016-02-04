@@ -1,0 +1,4 @@
+job:
+  tasks:
+  - uk.gov.dstl.baleen.testing.DummyTask
+  - uk.gov.dstl.baleen.testing.DummyTaskParams

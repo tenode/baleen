@@ -9,7 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.uima.collection.CollectionProcessingEngine;
 
 import uk.gov.dstl.baleen.cpe.PipelineCpeBuilder;
-import uk.gov.dstl.baleen.cpe.CpeBuilderTest;
+import uk.gov.dstl.baleen.cpe.PipelineCpeBuilderTest;
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 /**
@@ -42,15 +42,15 @@ public class PipelineTestHelper {
 	}
 
 	public static URL getCpeYamlResource() {
-		return CpeBuilderTest.class.getResource("dummyConfig.yaml");
+		return PipelineCpeBuilderTest.class.getResource("dummyConfig.yaml");
 	}
 
 	public static String getCpeYamlResourceAsString() throws IOException {
-		return IOUtils.toString(CpeBuilderTest.class.getResourceAsStream("resourceConfig.yaml"));
+		return IOUtils.toString(PipelineCpeBuilderTest.class.getResourceAsStream("resourceConfig.yaml"));
 	}
 
 	public static URL getCpeWithExternalResourceYamlResource() {
-		return CpeBuilderTest.class.getResource("resourceConfig.yaml");
+		return PipelineCpeBuilderTest.class.getResource("resourceConfig.yaml");
 	}
 
 	public static URL getPipelineManagerYamlResource() {

@@ -401,7 +401,7 @@ public abstract class AbstractCpeBuilder {
 	 * @return A configured CollectionReaderDescription
 	 */
 	protected Optional<CollectionReaderDescription> createCollectionReader(String className,
-			Map<String, Object> params) {
+			Map<String, Object> params, String defaultPackage) {
 		if (className == null || className.isEmpty()) {
 			LOGGER.warn("No class specified for Collection Reader");
 			return Optional.empty();
@@ -413,7 +413,7 @@ public abstract class AbstractCpeBuilder {
 
 		try {
 			Class<? extends CollectionReader> clazz = CpeBuilderUtils.getClassFromString(className,
-					READER_DEFAULT_PACKAGE);
+					defaultPackage);
 			Map<String, ExternalResourceDescription> crResources = getOrCreateResources(clazz);
 			Object[] cpeParam = CpeBuilderUtils.mergeAndExtractParams(globalConfig, params, ignoreParams, crResources);
 
@@ -434,7 +434,8 @@ public abstract class AbstractCpeBuilder {
 	 *            the params
 	 * @return the optional
 	 */
-	protected Optional<AnalysisEngineDescription> createAnnotator(String className, Map<String, Object> params) {
+	protected Optional<AnalysisEngineDescription> createAnnotator(String className, Map<String, Object> params,
+			String defaultPackage) {
 		if (className == null || className.isEmpty()) {
 			LOGGER.warn(
 					"No class name provided for annotator, or unable to parse list item - analysis engine will be skipped");
@@ -443,7 +444,7 @@ public abstract class AbstractCpeBuilder {
 
 		try {
 			Class<? extends AnalysisComponent> clazz = CpeBuilderUtils.getClassFromString(className,
-					ANNOTATOR_DEFAULT_PACKAGE);
+					defaultPackage);
 			Map<String, ExternalResourceDescription> aResources = getOrCreateResources(clazz);
 			Object[] aParams = CpeBuilderUtils.mergeAndExtractParams(globalConfig, params, ignoreParams,
 					aResources);
@@ -465,7 +466,8 @@ public abstract class AbstractCpeBuilder {
 	 *            the params
 	 * @return the optional
 	 */
-	protected Optional<AnalysisEngineDescription> createConsumer(String className, Map<String, Object> params) {
+	protected Optional<AnalysisEngineDescription> createConsumer(String className, Map<String, Object> params,
+			String defaultPackage) {
 
 		if (className == null || className.isEmpty()) {
 			LOGGER.warn(
@@ -475,7 +477,7 @@ public abstract class AbstractCpeBuilder {
 
 		try {
 			Class<? extends AnalysisComponent> clazz = CpeBuilderUtils.getClassFromString(className,
-					CONSUMER_DEFAULT_PACKAGE);
+					defaultPackage);
 			Map<String, ExternalResourceDescription> cResources = getOrCreateResources(clazz);
 			Object[] cParams = CpeBuilderUtils.mergeAndExtractParams(globalConfig, params, ignoreParams,
 					cResources);

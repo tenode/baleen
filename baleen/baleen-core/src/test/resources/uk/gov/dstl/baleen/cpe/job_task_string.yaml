@@ -1,0 +1,3 @@
+job:
+  tasks:
+  - uk.gov.dstl.baleen.testing.DummyTask

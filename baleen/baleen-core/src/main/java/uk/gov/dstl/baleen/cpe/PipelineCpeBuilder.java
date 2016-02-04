@@ -181,7 +181,8 @@ public class PipelineCpeBuilder extends AbstractCpeBuilder {
 			throw new BaleenException("No class specified for Collection Reader, or unable to parse");
 		}
 
-		Optional<CollectionReaderDescription> desc = createCollectionReader(className, params);
+		Optional<CollectionReaderDescription> desc = createCollectionReader(className, params,
+				READER_DEFAULT_PACKAGE);
 		if (desc.isPresent()) {
 			setCollectorReader(desc.get());
 		} else {
@@ -202,7 +203,7 @@ public class PipelineCpeBuilder extends AbstractCpeBuilder {
 			String className = CpeBuilderUtils.getClassNameFromConfig(objAnnotator);
 			Map<String, Object> params = CpeBuilderUtils.getParamsFromConfig(objAnnotator);
 
-			Optional<AnalysisEngineDescription> desc = createAnnotator(className, params);
+			Optional<AnalysisEngineDescription> desc = createAnnotator(className, params, ANNOTATOR_DEFAULT_PACKAGE);
 			if (desc.isPresent()) {
 				String name = CpeBuilderUtils.getComponentName(getAnnotatorNames(), "annotator:" + className);
 				addAnnotator(name, desc.get());
@@ -223,7 +224,7 @@ public class PipelineCpeBuilder extends AbstractCpeBuilder {
 			String className = CpeBuilderUtils.getClassNameFromConfig(objConsumer);
 			Map<String, Object> params = CpeBuilderUtils.getParamsFromConfig(objConsumer);
 
-			Optional<AnalysisEngineDescription> desc = createConsumer(className, params);
+			Optional<AnalysisEngineDescription> desc = createConsumer(className, params, CONSUMER_DEFAULT_PACKAGE);
 			if (desc.isPresent()) {
 				String name = CpeBuilderUtils.getComponentName(getConsumerNames(), "consumer:" + className);
 				addConsumer(name, desc.get());

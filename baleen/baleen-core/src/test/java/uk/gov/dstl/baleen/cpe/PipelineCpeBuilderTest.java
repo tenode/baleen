@@ -20,7 +20,7 @@ import uk.gov.dstl.baleen.exceptions.BaleenException;
 /**
  *
  */
-public class CpeBuilderTest {
+public class PipelineCpeBuilderTest {
 	private static final String PIPELINE = "test_pipeline";
 	private static final String DUMMY_CONFIG_EXAMPLE_COLOR = "example.color";
 	private static final String DUMMY_CONFIG_EXAMPLE_COUNT = "example.count";
@@ -55,7 +55,7 @@ public class CpeBuilderTest {
 		AnalysisEngine cp2 = (AnalysisEngine) cpe.getCasProcessors()[2];
 		assertEquals(RED, cp2.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COLOR));
 		assertEquals("7", cp2.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
-		assertEquals(PIPELINE, cp0.getConfigParameterValue(PipelineCpeBuilder.PIPELINE_NAME));
+		assertEquals(PIPELINE, cp2.getConfigParameterValue(PipelineCpeBuilder.PIPELINE_NAME));
 		assertEquals("annotator:uk.gov.dstl.baleen.testing.DummyAnnotator1 (3)",
 				cp2.getAnalysisEngineMetaData().getName());
 
@@ -63,19 +63,19 @@ public class CpeBuilderTest {
 		assertEquals(RED, cp3.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COLOR));
 		assertEquals("6", cp3.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
 		assertEquals(SQUARE, cp3.getConfigParameterValue(DUMMY_CONFIG_SHAPE));
-		assertEquals(PIPELINE, cp0.getConfigParameterValue(PipelineCpeBuilder.PIPELINE_NAME));
+		assertEquals(PIPELINE, cp3.getConfigParameterValue(PipelineCpeBuilder.PIPELINE_NAME));
 		assertEquals("annotator:uk.gov.dstl.baleen.testing.DummyAnnotator2", cp3.getAnalysisEngineMetaData().getName());
 
 		AnalysisEngine cp4 = (AnalysisEngine) cpe.getCasProcessors()[4];
 		assertEquals(RED, cp4.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COLOR));
 		assertEquals("7", cp4.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
-		assertEquals(PIPELINE, cp0.getConfigParameterValue(PipelineCpeBuilder.PIPELINE_NAME));
+		assertEquals(PIPELINE, cp4.getConfigParameterValue(PipelineCpeBuilder.PIPELINE_NAME));
 		assertEquals("consumer:uk.gov.dstl.baleen.testing.DummyConsumer", cp4.getAnalysisEngineMetaData().getName());
 	}
 
 	@Test
 	public void testNoValidAnnotators() throws Exception {
-		URL url = CpeBuilderTest.class.getResource("erroneousConfig1.yaml");
+		URL url = PipelineCpeBuilderTest.class.getResource("erroneousConfig1.yaml");
 		File yamlFile = new File(url.getFile());
 
 		try {
@@ -91,7 +91,7 @@ public class CpeBuilderTest {
 
 	@Test
 	public void testNoValidCollectionReader() throws Exception {
-		URL url = CpeBuilderTest.class.getResource("erroneousConfig2.yaml");
+		URL url = PipelineCpeBuilderTest.class.getResource("erroneousConfig2.yaml");
 		File yamlFile = new File(url.getFile());
 
 		try {
@@ -105,7 +105,7 @@ public class CpeBuilderTest {
 			assertEquals("No class specified for Collection Reader, or unable to parse", be.getMessage());
 		}
 
-		url = CpeBuilderTest.class.getResource("erroneousConfig3.yaml");
+		url = PipelineCpeBuilderTest.class.getResource("erroneousConfig3.yaml");
 		yamlFile = new File(url.getFile());
 
 		try {
@@ -123,7 +123,7 @@ public class CpeBuilderTest {
 
 	@Test
 	public void testPartiallyCorrectConfig() throws Exception {
-		URL url = CpeBuilderTest.class.getResource("erroneousConfig4.yaml");
+		URL url = PipelineCpeBuilderTest.class.getResource("erroneousConfig4.yaml");
 		File yamlFile = new File(url.getFile());
 
 		PipelineCpeBuilder builder = new PipelineCpeBuilder(PIPELINE, yamlFile);

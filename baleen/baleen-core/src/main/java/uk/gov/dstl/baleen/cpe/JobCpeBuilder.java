@@ -75,6 +75,11 @@ import uk.gov.dstl.baleen.exceptions.BaleenException;
  */
 public class JobCpeBuilder extends AbstractCpeBuilder {
 
+	private static final String DEFAULT_SCHEDULE_PACKAGE = "uk.gov.dstl.baleen.core.jobs.schedules";
+	private static final String DEFAULT_JOB_PACKAGE = "uk.gov.dstl.baleen.core.jobs";
+
+	private static final String DEFAULT_SCHEDULER = "uk.gov.dstl.baleen.core.jobs.schedules.Once";
+
 	/**
 	 * Initiate a CpeBuilder with a YAML configuration file
 	 *
@@ -128,11 +133,12 @@ public class JobCpeBuilder extends AbstractCpeBuilder {
 		String scheduleClass = CpeBuilderUtils.getClassNameFromConfig(scheduleConfig);
 		// Default to the Once scheduler
 		if (scheduleClass == null) {
-			scheduleClass = "uk.gov.dstl.baleen.core.jobs.schedules.Once";
+			scheduleClass = DEFAULT_SCHEDULER;
 		}
 		Map<String, Object> scheduleParams = CpeBuilderUtils.getParamsFromConfig(scheduleConfig);
 
-		Optional<CollectionReaderDescription> scheduler = createCollectionReader(scheduleClass, scheduleParams);
+		Optional<CollectionReaderDescription> scheduler = createCollectionReader(scheduleClass, scheduleParams,
+				DEFAULT_SCHEDULE_PACKAGE);
 		if (scheduler.isPresent()) {
 			setCollectorReader(scheduler.get());
 		}
@@ -140,12 +146,12 @@ public class JobCpeBuilder extends AbstractCpeBuilder {
 		Object tasksConfig = jobConfig.get("tasks");
 		if (tasksConfig instanceof List) {
 			for (Object task : (List<Object>) tasksConfig) {
-				String taskClass = CpeBuilderUtils.getClassNameFromConfig(scheduleConfig);
-				Map<String, Object> taskParams = CpeBuilderUtils.getParamsFromConfig(scheduleClass);
+				String taskClass = CpeBuilderUtils.getClassNameFromConfig(task);
+				Map<String, Object> taskParams = CpeBuilderUtils.getParamsFromConfig(task);
 
-				Optional<AnalysisEngineDescription> ae = createAnnotator(taskClass, taskParams);
+				Optional<AnalysisEngineDescription> ae = createAnnotator(taskClass, taskParams, DEFAULT_JOB_PACKAGE);
 				if (ae.isPresent()) {
-					String componentName = CpeBuilderUtils.getComponentName(getAnnotatorNames(), "task:");
+					String componentName = CpeBuilderUtils.getComponentName(getAnnotatorNames(), "task:" + taskClass);
 					addAnnotator(componentName, ae.get());
 				}
 			}
