@@ -14,7 +14,7 @@ import uk.gov.dstl.baleen.cpe.AbstractCpeController;
 
 /**
  * Represents a single CPE based pipeline to the
- * {@link uk.gov.dstl.baleen.core.pipelines.BaleenPipelineManager}.
+ * {@link uk.gov.dstl.baleen.core.pipelines.BaleenJobManager}.
  *
  *
  *
