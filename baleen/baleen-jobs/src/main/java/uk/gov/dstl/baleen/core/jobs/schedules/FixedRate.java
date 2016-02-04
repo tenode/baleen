@@ -15,10 +15,10 @@ public class FixedRate extends BaleenScheduler {
 	/**
 	 * The time in seconds between start of one run and the start of the next.
 	 *
-	 * @baleen.config 3600
+	 * @baleen.config 0
 	 */
 	public static final String PARAM_PERIOD = "period";
-	@ConfigurationParameter(name = FixedRate.PARAM_PERIOD, defaultValue = "3600")
+	@ConfigurationParameter(name = FixedRate.PARAM_PERIOD, defaultValue = "0")
 	private long period;
 
 	private long lastRunTime = 0;
@@ -38,14 +38,14 @@ public class FixedRate extends BaleenScheduler {
 		final long timeSinceLast = System.currentTimeMillis() - lastRunTime;
 
 		// We are are already over due, run now
-		if (timeSinceLast < periodInMs) {
+		if (timeSinceLast > periodInMs) {
 			lastRunTime = System.currentTimeMillis();
 			return true;
 		}
 
 		// Otherwise block and wait
 		try {
-			Thread.sleep(Math.max(0, timeSinceLast - periodInMs));
+			Thread.sleep(Math.max(0, periodInMs - timeSinceLast));
 			lastRunTime = System.currentTimeMillis();
 			return true;
 		} catch (final InterruptedException e) {

@@ -16,7 +16,7 @@ public class Repeat extends FixedDelay {
 	 * @baleen.config 1
 	 */
 	public static final String PARAM_TIMES = "count";
-	@ConfigurationParameter(name = FixedRate.PARAM_PERIOD, defaultValue = "1")
+	@ConfigurationParameter(name = PARAM_TIMES, defaultValue = "1")
 	private long count;
 
 	private long runs = 0;

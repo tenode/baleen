@@ -13,10 +13,10 @@ public class FixedDelay extends BaleenScheduler {
 	/**
 	 * The time in seconds between runs (end of one run to the start of the next)
 	 *
-	 * @baleen.config 3600
+	 * @baleen.config 0
 	 */
 	public static final String PARAM_PERIOD = "period";
-	@ConfigurationParameter(name = FixedDelay.PARAM_PERIOD, defaultValue = "3600")
+	@ConfigurationParameter(name = FixedDelay.PARAM_PERIOD, defaultValue = "0")
 	private long period;
 
 	private long lastRunTime = 0;
@@ -32,7 +32,9 @@ public class FixedDelay extends BaleenScheduler {
 	 * @return true, if successful
 	 */
 	protected boolean delay() {
+
 		if (lastRunTime == 0) {
+			lastRunTime = System.currentTimeMillis();
 			return true;
 		}
 

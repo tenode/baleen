@@ -54,14 +54,14 @@ public abstract class BaleenScheduler extends JCasCollectionReader_ImplBase {
 		final String pipelineName = UimaUtils.getPipelineName(context);
 		monitor = new UimaMonitor(pipelineName, this.getClass());
 
-		monitor.startFunction("initialize");
+		getMonitor().startFunction("initialize");
 
 		// Pull the config parameters out for job settings
 		config = BaleenScheduler.getConfigParameters(context);
 
 		doInitialize(context);
 
-		monitor.finishFunction("initialize");
+		getMonitor().finishFunction("initialize");
 
 	}
 
@@ -78,7 +78,7 @@ public abstract class BaleenScheduler extends JCasCollectionReader_ImplBase {
 
 	@Override
 	public final void getNext(final JCas jCas) throws IOException, CollectionException {
-		monitor.startFunction("getNext");
+		getMonitor().startFunction("getNext");
 		MetricsFactory.getInstance().getPipelineMetrics(monitor.getPipelineName()).startDocumentProcess();
 
 		final JobSettings settings = new JobSettings(jCas);
@@ -86,8 +86,7 @@ public abstract class BaleenScheduler extends JCasCollectionReader_ImplBase {
 			settings.set(e.getKey(), e.getValue());
 		}
 
-		monitor.finishFunction("getNext");
-		monitor.persistCounts();
+		getMonitor().finishFunction("getNext");
 	}
 
 	/**
