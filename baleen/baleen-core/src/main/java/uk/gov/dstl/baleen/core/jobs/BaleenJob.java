@@ -65,7 +65,7 @@ public class BaleenJob extends AbstractCpeController {
 	 *            non-null
 	 */
 	public BaleenJob(String name, CollectionProcessingEngine engine) {
-		super(name, null, engine);
+		super(name, engine);
 	}
 
 	@Override

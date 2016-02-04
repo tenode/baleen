@@ -2,6 +2,7 @@ package uk.gov.dstl.baleen.cpe;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,7 +63,7 @@ public final class CpeBuilderUtils {
 	 *            The package to look in if the className isn't a fully qualified name
 	 * @return The class specified
 	 */
-	static <S extends T, T> Class<S> getClassFromString(String className, String... defaultPackage)
+	public static <S extends T, T> Class<S> getClassFromString(String className, String... defaultPackage)
 			throws InvalidParameterException {
 		for (String pkg : defaultPackage) {
 			try {
@@ -88,7 +89,7 @@ public final class CpeBuilderUtils {
 	 *            the object to convert
 	 * @return type which can be submitted to UIMA as a parameter value.
 	 */
-	static Object convertToParameterValue(Object object) {
+	public static Object convertToParameterValue(Object object) {
 		if (object == null || object instanceof String || object instanceof String[] || object instanceof Boolean) {
 			// NOTE: Boolean appears to be a special case for Uima (as the cast will fail)
 			return object;
@@ -109,7 +110,7 @@ public final class CpeBuilderUtils {
 	 *            the object to convert
 	 * @return type which can be submitted to UIMA as a parameter value.
 	 */
-	static Object convertToParameterValues(Object object) {
+	public static Object convertToParameterValues(Object object) {
 		Collection<Object> collection;
 		if (object instanceof Object[]) {
 			collection = Arrays.asList((Object[]) object);
@@ -151,7 +152,7 @@ public final class CpeBuilderUtils {
 	 * @return An array of object pairs, where the first object in the pair is the key and the
 	 *         second object in the pair is the value
 	 */
-	static Object[] mergeAndExtractParams(Map<String, ? extends Object> globalConfig,
+	public static Object[] mergeAndExtractParams(Map<String, ? extends Object> globalConfig,
 			Map<String, ? extends Object> localParams,
 			Collection<String> ignoreParams,
 			Map<String, ExternalResourceDescription> resources) {
@@ -198,7 +199,7 @@ public final class CpeBuilderUtils {
 	 * @return An array of object pairs, where the first object in the pair is the key and the
 	 *         second object in the pair is the value
 	 */
-	static Object[] extractParams(Map<String, ? extends Object> config,
+	public static Object[] extractParams(Map<String, ? extends Object> config,
 			Collection<String> ignoreParams,
 			Map<String, ExternalResourceDescription> resources) {
 		// Get the set of unique keys
@@ -223,5 +224,60 @@ public final class CpeBuilderUtils {
 		}
 
 		return params;
+	}
+
+	/**
+	 * Given the standard configuration block in Yaml, extract the class name
+	 *
+	 * Block looks like:
+	 *
+	 * <pre>
+	 * - class: Something
+	 *   param1: value1
+	 *
+	 * OR
+	 * - Something
+	 * </pre>
+	 *
+	 *
+	 * @param config
+	 *            the config
+	 * @return the class name from config
+	 */
+	public static String getClassNameFromConfig(Object config) {
+		if (config instanceof String) {
+			return (String) config;
+		} else if (config instanceof Map) {
+			Map<String, Object> consumer = (Map<String, Object>) config;
+			return (String) consumer.get(AbstractCpeBuilder.CLASS);
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Given the standard configuration block in Yaml, extract the parameters (including class).
+	 *
+	 * Block looks like:
+	 *
+	 * <pre>
+	 * - class: Something
+	 *   param1: value1
+	 *
+	 * OR
+	 * - Something
+	 * </pre>
+	 *
+	 *
+	 * @param config
+	 *            the config
+	 * @return the map (never null)
+	 */
+	public static Map<String, Object> getParamsFromConfig(Object config) {
+		if (config instanceof Map) {
+			return (Map<String, Object>) config;
+		} else {
+			return Collections.emptyMap();
+		}
 	}
 }

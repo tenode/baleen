@@ -4,7 +4,6 @@ package uk.gov.dstl.baleen.cpe;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -172,31 +171,23 @@ public class PipelineCpeBuilder extends AbstractCpeBuilder {
 	 * @return A configured CollectionReaderDescription
 	 */
 	private void createCollectionReader(Object collectionReaderConfig) throws BaleenException {
-		String crClassName = null;
-		Map<String, Object> params = Collections.emptyMap();
-
-		if (collectionReaderConfig instanceof String) {
-			crClassName = (String) collectionReaderConfig;
-		} else if (collectionReaderConfig instanceof Map) {
-			Map<String, Object> reader = (Map<String, Object>) collectionReaderConfig;
-			crClassName = (String) reader.get(CLASS);
-			params = reader;
-		}
+		String className = CpeBuilderUtils.getClassNameFromConfig(collectionReaderConfig);
+		Map<String, Object> params = CpeBuilderUtils.getParamsFromConfig(collectionReaderConfig);
 
 		// This is also done by the createCollectionReader but this is backward compatible with the
 		// tests
 
-		if (crClassName == null || crClassName.isEmpty()) {
+		if (className == null || className.isEmpty()) {
 			throw new BaleenException("No class specified for Collection Reader, or unable to parse");
 		}
 
-		Optional<CollectionReaderDescription> desc = createCollectionReader(crClassName, params);
+		Optional<CollectionReaderDescription> desc = createCollectionReader(className, params);
 		if (desc.isPresent()) {
 			setCollectorReader(desc.get());
 		} else {
 			// Whilst this would be caught by the build() process throwing an exception here is
 			// compatible with existing Baleen tests.
-			throw new BaleenException(String.format("Could not find or instantiate analysis engine %s", crClassName));
+			throw new BaleenException(String.format("Could not find or instantiate analysis engine %s", className));
 		}
 	}
 
@@ -208,20 +199,12 @@ public class PipelineCpeBuilder extends AbstractCpeBuilder {
 	 */
 	private void createAnnotators(List<Object> annotatorsConfig) {
 		for (Object objAnnotator : annotatorsConfig) {
-			String aClassName = null;
-			Map<String, Object> params = Collections.emptyMap();
+			String className = CpeBuilderUtils.getClassNameFromConfig(objAnnotator);
+			Map<String, Object> params = CpeBuilderUtils.getParamsFromConfig(objAnnotator);
 
-			if (objAnnotator instanceof String) {
-				aClassName = (String) objAnnotator;
-			} else if (objAnnotator instanceof Map) {
-				Map<String, Object> annotator = (Map<String, Object>) objAnnotator;
-				aClassName = (String) annotator.get(CLASS);
-				params = annotator;
-			}
-
-			Optional<AnalysisEngineDescription> desc = createAnnotator(aClassName, params);
+			Optional<AnalysisEngineDescription> desc = createAnnotator(className, params);
 			if (desc.isPresent()) {
-				String name = CpeBuilderUtils.getComponentName(getAnnotatorNames(), "annotator:" + aClassName);
+				String name = CpeBuilderUtils.getComponentName(getAnnotatorNames(), "annotator:" + className);
 				addAnnotator(name, desc.get());
 			}
 
@@ -237,20 +220,12 @@ public class PipelineCpeBuilder extends AbstractCpeBuilder {
 	 */
 	private void createConsumers(List<Object> consumersConfig) {
 		for (Object objConsumer : consumersConfig) {
-			String cClassName = null;
-			Map<String, Object> params = Collections.emptyMap();
+			String className = CpeBuilderUtils.getClassNameFromConfig(objConsumer);
+			Map<String, Object> params = CpeBuilderUtils.getParamsFromConfig(objConsumer);
 
-			if (objConsumer instanceof String) {
-				cClassName = (String) objConsumer;
-			} else if (objConsumer instanceof Map) {
-				Map<String, Object> consumer = (Map<String, Object>) objConsumer;
-				cClassName = (String) consumer.get(CLASS);
-				params = consumer;
-			}
-
-			Optional<AnalysisEngineDescription> desc = createConsumer(cClassName, params);
+			Optional<AnalysisEngineDescription> desc = createConsumer(className, params);
 			if (desc.isPresent()) {
-				String name = CpeBuilderUtils.getComponentName(getConsumerNames(), "consumer:" + cClassName);
+				String name = CpeBuilderUtils.getComponentName(getConsumerNames(), "consumer:" + className);
 				addConsumer(name, desc.get());
 			}
 
