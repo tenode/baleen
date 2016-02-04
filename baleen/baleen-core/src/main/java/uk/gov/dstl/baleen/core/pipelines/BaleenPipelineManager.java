@@ -6,6 +6,8 @@ import java.io.File;
 import org.apache.uima.collection.CollectionProcessingEngine;
 
 import uk.gov.dstl.baleen.cpe.AbstractCpeManager;
+import uk.gov.dstl.baleen.cpe.CpeBuilder;
+import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 /**
  * Manages life cycle of a collection of {@link uk.gov.dstl.baleen.core.pipelines.BaleenPipeline}.
@@ -46,6 +48,12 @@ public class BaleenPipelineManager extends AbstractCpeManager<BaleenPipeline> {
 	protected BaleenPipeline createNewController(String name, String yaml, File source,
 			CollectionProcessingEngine engine) {
 		return new BaleenPipeline(name, yaml, source, engine);
+	}
+
+	@Override
+	protected CollectionProcessingEngine createNewCpe(String name, String yaml) throws BaleenException {
+		CpeBuilder builder = new CpeBuilder(name, yaml);
+		return builder.getCPE();
 	}
 
 }

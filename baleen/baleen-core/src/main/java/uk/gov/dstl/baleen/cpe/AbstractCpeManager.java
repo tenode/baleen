@@ -225,9 +225,6 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 		return controller;
 	}
 
-	protected abstract T createNewController(String name, String yaml, File source,
-			CollectionProcessingEngine engine);
-
 	/**
 	 * Create a controller from an InputStream (backing off to YAML).
 	 *
@@ -253,8 +250,7 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 * @throws BaleenException
 	 */
 	public T create(String name, String yaml) throws BaleenException {
-		CpeBuilder builder = new CpeBuilder(name, yaml);
-		return create(name, null, yaml, builder.getCPE());
+		return create(name, null, yaml, createNewCpe(name, yaml));
 	}
 
 	/**
@@ -267,8 +263,7 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	 * @throws BaleenException
 	 */
 	public T create(String name, File source, String yaml) throws BaleenException {
-		CpeBuilder builder = new CpeBuilder(name, yaml);
-		return create(name, source, yaml, builder.getCPE());
+		return create(name, source, yaml, createNewCpe(name, yaml));
 	}
 
 	/**
@@ -325,5 +320,30 @@ public abstract class AbstractCpeManager<T extends AbstractCpeController> extend
 	public boolean has(String name) {
 		return controllers.containsKey(name);
 	}
+
+	/**
+	 * Create a controller instance based on the provided values
+	 *
+	 * @param name
+	 * @param yaml
+	 * @param source
+	 * @param engine
+	 * @return
+	 */
+	protected abstract T createNewController(String name, String yaml, File source,
+			CollectionProcessingEngine engine);
+
+	/**
+	 * Creates the new CPE with the correct name and based on the provided yaml.
+	 *
+	 * @param name
+	 *            the name
+	 * @param yaml
+	 *            the yaml
+	 * @return the collection processing engine
+	 * @throws BaleenException
+	 *             the baleen exception
+	 */
+	protected abstract CollectionProcessingEngine createNewCpe(String name, String yaml) throws BaleenException;
 
 }
