@@ -43,6 +43,14 @@ public class BaleenTaskTest extends AbstractBaleenTaskTest {
 	}
 
 	@Test
+	public void testTwoTasks() throws ResourceInitializationException, AnalysisEngineProcessException {
+		AnalysisEngine task1 = create(DummyTaskWithParams.class, "value", "different");
+		AnalysisEngine task2 = create(CounterTask.class);
+		JobSettings settings = execute(task1, task2);
+		assertEquals("different", settings.get("key").get());
+	}
+
+	@Test
 	public void fullTest()
 			throws ResourceInitializationException, AnalysisEngineProcessException, BaleenException,
 			InterruptedException {
@@ -54,6 +62,29 @@ public class BaleenTaskTest extends AbstractBaleenTaskTest {
 
 		Thread.sleep(1000);
 		assertEquals(1, CounterTask.getExecutedCount());
+	}
+
+	// TODO: This fails (there is no key of that name) which implies that the JobSetting JCas
+	// does not work (metadata values not pushed between tasks
+	@Test
+	public void fullTestWithTwoTasks()
+			throws ResourceInitializationException, AnalysisEngineProcessException, BaleenException,
+			InterruptedException {
+
+		wrapInJob(DummyTaskWithParams.class, CounterTask.class);
+		assertEquals(0, CounterTask.getExecutedCount());
+
+		getJobManager().startAll();
+
+		Thread.sleep(1000);
+		assertEquals(1, CounterTask.getExecutedCount());
+
+		// Nothing printed here!
+		// CounterTask.getLastSettings().keys().forEach(System.out::println);
+		// JCasUtil.select(getJCas(), BaleenAnnotation.class).stream().forEach(a ->
+		// System.out.println(a.getType()));
+
+		assertEquals("value", CounterTask.getLastSettings().get("key").get());
 	}
 
 }

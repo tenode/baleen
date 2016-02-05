@@ -1,6 +1,7 @@
 package uk.gov.dstl.baleen.core.jobs;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
@@ -90,16 +91,18 @@ public class JobSettings {
 		final Optional<Metadata> metadata = getMetadata(key);
 
 		// If so, update or else create
+		Metadata md;
 		if (metadata.isPresent()) {
-			metadata.get().setValue(value);
+			md = metadata.get();
+			md.setValue(value);
 		} else {
-			final Metadata md = new Metadata(jCas);
+			md = new Metadata(jCas);
 			md.setBegin(0);
-			md.setEnd(0);
+			md.setEnd(1);
 			md.setKey(key);
 			md.setValue(value);
-			md.addToIndexes();
 		}
+		md.addToIndexes();
 	}
 
 	/**
@@ -113,6 +116,11 @@ public class JobSettings {
 		if (metadata.isPresent()) {
 			metadata.get().removeFromIndexes();
 		}
+	}
+
+	public Stream<String> keys() {
+		return JCasUtil.select(jCas, Metadata.class).stream()
+				.map(m -> m.getKey());
 	}
 
 }

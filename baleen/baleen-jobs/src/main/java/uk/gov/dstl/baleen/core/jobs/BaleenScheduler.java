@@ -81,6 +81,9 @@ public abstract class BaleenScheduler extends JCasCollectionReader_ImplBase {
 		getMonitor().startFunction("getNext");
 		MetricsFactory.getInstance().getPipelineMetrics(monitor.getPipelineName()).startDocumentProcess();
 
+		jCas.setDocumentText(JobSettings.class.getSimpleName());
+		jCas.setDocumentLanguage("en");
+
 		final JobSettings settings = new JobSettings(jCas);
 		for (final Map.Entry<String, String> e : config.entrySet()) {
 			settings.set(e.getKey(), e.getValue());
