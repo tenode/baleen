@@ -3,7 +3,7 @@ package uk.gov.dstl.baleen.core.jobs.schedules;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.apache.uima.resource.ResourceInitializationException;
 
-import uk.gov.dstl.baleen.core.jobs.BaleenScheduler;
+import uk.gov.dstl.baleen.uima.jobs.BaleenScheduler;
 
 public class AbstractSchedulerTest<T extends BaleenScheduler> {
 

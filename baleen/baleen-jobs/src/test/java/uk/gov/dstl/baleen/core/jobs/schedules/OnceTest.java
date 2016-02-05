@@ -5,10 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.apache.uima.UIMAException;
 import org.apache.uima.collection.CollectionException;
-import org.apache.uima.fit.factory.JCasFactory;
-import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.junit.Test;
 
@@ -26,22 +23,6 @@ public class OnceTest extends AbstractSchedulerTest<Once> {
 
 		assertFalse(once.hasNext());
 		assertFalse(once.hasNext());
-	}
-
-	@Test
-	public void testLifecycle() throws IOException, UIMAException {
-
-		Once once = create();
-
-		assertTrue(once.hasNext());
-
-		assertTrue(once.getProgress() != null);
-
-		JCas jCas = JCasFactory.createJCas();
-		once.getNext(jCas);
-
-		once.destroy();
-
 	}
 
 }

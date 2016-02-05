@@ -1,4 +1,4 @@
-package uk.gov.dstl.baleen.core.jobs;
+package uk.gov.dstl.baleen.uima.jobs;
 
 import java.util.Map;
 
@@ -12,6 +12,8 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.junit.After;
 import org.junit.Before;
 
+import uk.gov.dstl.baleen.core.jobs.BaleenJob;
+import uk.gov.dstl.baleen.core.jobs.BaleenJobManager;
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 public class AbstractBaleenTaskTest {
@@ -43,7 +45,7 @@ public class AbstractBaleenTaskTest {
 	}
 
 	private String getYaml(Class<? extends BaleenTask>... taskClasses) {
-		StringBuilder sb = new StringBuilder("job:\n  schedule: Once\n  tasks:\n");
+		StringBuilder sb = new StringBuilder("job:\n  tasks:\n");
 		for (Class<? extends BaleenTask> taskClass : taskClasses) {
 			sb.append(String.format("  - class: %s\n", taskClass.getName()));
 		}

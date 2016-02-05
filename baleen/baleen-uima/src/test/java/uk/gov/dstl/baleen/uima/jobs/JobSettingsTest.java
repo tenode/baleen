@@ -1,4 +1,4 @@
-package uk.gov.dstl.baleen.core.jobs;
+package uk.gov.dstl.baleen.uima.jobs;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -8,6 +8,8 @@ import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.jcas.JCas;
 import org.junit.Before;
 import org.junit.Test;
+
+import uk.gov.dstl.baleen.uima.jobs.JobSettings;
 
 public class JobSettingsTest {
 

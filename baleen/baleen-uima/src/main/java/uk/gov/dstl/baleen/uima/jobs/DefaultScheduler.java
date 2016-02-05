@@ -1,11 +1,11 @@
-package uk.gov.dstl.baleen.core.jobs.schedules;
+package uk.gov.dstl.baleen.uima.jobs;
 
 import uk.gov.dstl.baleen.uima.jobs.BaleenScheduler;
 
 /**
  * A scheduler which will run a job once, and then stop it.
  */
-public class Once extends BaleenScheduler {
+public class DefaultScheduler extends BaleenScheduler {
 
 	private boolean hasRun = false;
 

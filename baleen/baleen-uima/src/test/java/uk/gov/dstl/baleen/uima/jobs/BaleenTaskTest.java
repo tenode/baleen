@@ -1,4 +1,4 @@
-package uk.gov.dstl.baleen.core.jobs;
+package uk.gov.dstl.baleen.uima.jobs;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,9 +8,9 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.gov.dstl.baleen.core.jobs.dummy.CounterTask;
-import uk.gov.dstl.baleen.core.jobs.dummy.DummyTaskWithParams;
 import uk.gov.dstl.baleen.exceptions.BaleenException;
+import uk.gov.dstl.baleen.uima.jobs.dummy.CounterTask;
+import uk.gov.dstl.baleen.uima.jobs.dummy.DummyTaskWithParams;
 
 public class BaleenTaskTest extends AbstractBaleenTaskTest {
 

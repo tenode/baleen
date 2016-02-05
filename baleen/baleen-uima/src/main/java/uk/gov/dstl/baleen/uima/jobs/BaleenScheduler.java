@@ -1,4 +1,4 @@
-package uk.gov.dstl.baleen.core.jobs;
+package uk.gov.dstl.baleen.uima.jobs;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,7 +11,6 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Progress;
 
-import uk.gov.dstl.baleen.core.jobs.schedules.FixedRate;
 import uk.gov.dstl.baleen.core.metrics.MetricsFactory;
 import uk.gov.dstl.baleen.uima.UimaMonitor;
 import uk.gov.dstl.baleen.uima.utils.UimaUtils;

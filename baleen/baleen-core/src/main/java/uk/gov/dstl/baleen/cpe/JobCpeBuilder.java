@@ -78,7 +78,7 @@ public class JobCpeBuilder extends AbstractCpeBuilder {
 	private static final String DEFAULT_SCHEDULE_PACKAGE = "uk.gov.dstl.baleen.core.jobs.schedules";
 	private static final String DEFAULT_JOB_PACKAGE = "uk.gov.dstl.baleen.core.jobs";
 
-	private static final String DEFAULT_SCHEDULER = "uk.gov.dstl.baleen.core.jobs.schedules.Once";
+	private static final String DEFAULT_SCHEDULER = "uk.gov.dstl.baleen.uima.jobs.DefaultScheduler";
 
 	/**
 	 * Initiate a CpeBuilder with a YAML configuration file

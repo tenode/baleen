@@ -1,4 +1,4 @@
-package uk.gov.dstl.baleen.core.jobs;
+package uk.gov.dstl.baleen.uima.jobs;
 
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;

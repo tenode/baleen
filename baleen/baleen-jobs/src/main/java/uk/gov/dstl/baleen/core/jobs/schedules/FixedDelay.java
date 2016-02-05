@@ -2,7 +2,7 @@ package uk.gov.dstl.baleen.core.jobs.schedules;
 
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
 
-import uk.gov.dstl.baleen.core.jobs.BaleenScheduler;
+import uk.gov.dstl.baleen.uima.jobs.BaleenScheduler;
 
 /**
  * A scheduler which runs a job X seconds after it last completed (defined by period).

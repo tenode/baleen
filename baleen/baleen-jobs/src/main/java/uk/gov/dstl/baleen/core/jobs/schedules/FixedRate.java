@@ -2,7 +2,7 @@ package uk.gov.dstl.baleen.core.jobs.schedules;
 
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
 
-import uk.gov.dstl.baleen.core.jobs.BaleenScheduler;
+import uk.gov.dstl.baleen.uima.jobs.BaleenScheduler;
 
 /**
  * A scheduler which runs a job at a set rate, every X seconds (defined by period).

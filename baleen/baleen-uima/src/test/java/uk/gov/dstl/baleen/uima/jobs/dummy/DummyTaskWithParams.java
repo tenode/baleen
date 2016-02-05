@@ -1,10 +1,10 @@
-package uk.gov.dstl.baleen.core.jobs.dummy;
+package uk.gov.dstl.baleen.uima.jobs.dummy;
 
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.descriptor.ConfigurationParameter;
 
-import uk.gov.dstl.baleen.core.jobs.BaleenTask;
-import uk.gov.dstl.baleen.core.jobs.JobSettings;
+import uk.gov.dstl.baleen.uima.jobs.BaleenTask;
+import uk.gov.dstl.baleen.uima.jobs.JobSettings;
 
 public class DummyTaskWithParams extends BaleenTask {
 
