@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.gov.dstl.baleen.core.jobs.BaleenJobManager;
 import uk.gov.dstl.baleen.core.logging.BaleenLogging;
 import uk.gov.dstl.baleen.core.metrics.MetricsFactory;
 import uk.gov.dstl.baleen.core.pipelines.BaleenPipelineManager;
@@ -19,25 +20,23 @@ import uk.gov.dstl.baleen.core.web.BaleenWebApi;
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 /**
- * Manages the complete Baleen instance, including all components such as
- * pipelines and web APIs.
+ * Manages the complete Baleen instance, including all components such as pipelines and web APIs.
  *
- * 
+ *
  *
  */
 public class BaleenManager {
 
 	/**
-	 * A listener which is passed to {@link BaleenManager} in order to be
-	 * notified when the manager is fully initialised.
+	 * A listener which is passed to {@link BaleenManager} in order to be notified when the manager
+	 * is fully initialised.
 	 */
 	public interface BaleenManagerListener {
 
 		/**
 		 * Called when the manager is full started.
 		 *
-		 * Returning from this function will cause shutdown of the Baleen
-		 * manager.
+		 * Returning from this function will cause shutdown of the Baleen manager.
 		 *
 		 * @param manager
 		 *            the initialised and started manager.
@@ -54,6 +53,8 @@ public class BaleenManager {
 	private BaleenWebApi webApi;
 
 	private BaleenPipelineManager pipelineManager;
+
+	private BaleenJobManager jobManager;
 
 	private boolean exit = false;
 
@@ -101,6 +102,11 @@ public class BaleenManager {
 		logging.configure(configuration);
 		logging.start();
 
+		LOGGER.info("Initiating job manager");
+		jobManager = new BaleenJobManager();
+		jobManager.configure(configuration);
+		jobManager.start();
+
 		LOGGER.info("Initiating pipeline manager");
 		pipelineManager = new BaleenPipelineManager();
 		pipelineManager.configure(configuration);
@@ -110,6 +116,9 @@ public class BaleenManager {
 		webApi = new BaleenWebApi(this);
 		webApi.configure(configuration);
 		webApi.start();
+
+		LOGGER.info("Starting all pre-configured jobs");
+		jobManager.startAll();
 
 		LOGGER.info("Starting all pre-configured pipelines");
 		pipelineManager.startAll();
@@ -133,6 +142,14 @@ public class BaleenManager {
 					pipelineManager.stop();
 				} catch (BaleenException e) {
 					LOGGER.error("Failed to stop pipeline manager", e);
+				}
+			}
+
+			if (jobManager != null) {
+				try {
+					jobManager.stop();
+				} catch (BaleenException e) {
+					LOGGER.error("Failed to stop job manager", e);
 				}
 			}
 
@@ -168,21 +185,15 @@ public class BaleenManager {
 	public void runUntilStopped() {
 		exit = false;
 
-		run(new BaleenManagerListener() {
-
-			@Override
-			public void onStarted(BaleenManager manager) {
-				while (!isStopping()) {
-					sleep(1000);
-				}
+		run(manager -> {
+			while (!isStopping()) {
+				sleep(1000);
 			}
-
 		});
 	}
 
 	/**
-	 * Start up a Baleen instance, then run the provided runnable before
-	 * shutting down.
+	 * Start up a Baleen instance, then run the provided runnable before shutting down.
 	 *
 	 * This is useful for full integration tests, or building simple tools.
 	 *
@@ -282,7 +293,7 @@ public class BaleenManager {
 
 	/**
 	 * Get the YAML used to configure this instance.
-	 * 
+	 *
 	 * @return
 	 */
 	public synchronized String getYaml() {

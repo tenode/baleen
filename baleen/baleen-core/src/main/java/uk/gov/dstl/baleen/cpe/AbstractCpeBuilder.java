@@ -282,7 +282,10 @@ public abstract class AbstractCpeBuilder {
 				// Flatten global configuration
 				Map<String, Object> subconfig = (Map<String, Object>) v;
 				for (String subkey : subconfig.keySet()) {
-					globalConfig.put(key + "." + subkey, subconfig.get(subkey));
+					Object value = subconfig.get(subkey);
+					if (value instanceof String) {
+						globalConfig.put(key + "." + subkey, value);
+					}
 				}
 			} else if (v instanceof String) {
 				globalConfig.put(key, v);
