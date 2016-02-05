@@ -29,4 +29,9 @@ public class CounterTask extends BaleenTask {
 		return executedCount;
 	}
 
+	public static void reset() {
+		lastSettings = null;
+		executedCount = 0;
+	}
+
 }

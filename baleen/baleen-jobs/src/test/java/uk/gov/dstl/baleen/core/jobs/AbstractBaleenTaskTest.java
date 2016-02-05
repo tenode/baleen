@@ -42,8 +42,12 @@ public class AbstractBaleenTaskTest {
 		return AnalysisEngineFactory.createEngine(taskClass);
 	}
 
-	private String getYaml(Class<? extends BaleenTask> taskClass) {
-		return String.format("job:\n  schedule: Once\n  tasks:\n  - class: %s\n", taskClass.getName());
+	private String getYaml(Class<? extends BaleenTask>... taskClasses) {
+		StringBuilder sb = new StringBuilder("job:\n  schedule: Once\n  tasks:\n");
+		for (Class<? extends BaleenTask> taskClass : taskClasses) {
+			sb.append(String.format("  - class: %s\n", taskClass.getName()));
+		}
+		return sb.toString();
 	}
 
 	private String getYaml(Class<? extends BaleenTask> taskClass, Map<String, String> params) {
@@ -56,8 +60,8 @@ public class AbstractBaleenTaskTest {
 		return params.toString();
 	}
 
-	protected BaleenJob wrapInJob(Class<? extends BaleenTask> taskClass) throws BaleenException {
-		String yaml = getYaml(taskClass);
+	protected BaleenJob wrapInJob(Class<? extends BaleenTask>... taskClasses) throws BaleenException {
+		String yaml = getYaml(taskClasses);
 		return jobManager.create("testjob", yaml);
 	}
 
@@ -75,4 +79,11 @@ public class AbstractBaleenTaskTest {
 		return new JobSettings(jCas);
 	}
 
+	public BaleenJobManager getJobManager() {
+		return jobManager;
+	}
+
+	public JCas getJCas() {
+		return jCas;
+	}
 }
