@@ -27,6 +27,11 @@
 		</dependency>
 		<dependency>
 			<groupId>uk.gov.dstl.baleen</groupId>
+			<artifactId>baleen-jobs</artifactId>
+			<version>${baleen.version}</version>
+		</dependency>			
+		<dependency>
+			<groupId>uk.gov.dstl.baleen</groupId>
 			<artifactId>baleen-core</artifactId>
 			<version>${baleen.version}</version>
 		</dependency>
