@@ -18,7 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 /**
- * Test for {@link BaleenPipeline}.
+ * Test for {@link BaleenJob}.
  *
  * Specifically doesn't test the underlying uima engine.
  *
@@ -33,7 +33,7 @@ public class BaleenPipelineTest {
 
 	@Test
 	public void testWithCpe() throws BaleenException {
-		BaleenPipeline pipeline = new BaleenPipeline("test", null, PipelineTestHelper.createCpe("test"));
+		BaleenJob pipeline = new BaleenJob("test", null, PipelineTestHelper.createCpe("test"));
 
 		pipeline.start();
 
@@ -42,14 +42,14 @@ public class BaleenPipelineTest {
 
 	@Test
 	public void testGetName() {
-		BaleenPipeline pipeline = new BaleenPipeline("test", null, engine);
+		BaleenJob pipeline = new BaleenJob("test", null, engine);
 
 		assertEquals("test", pipeline.getName());
 	}
 
 	@Test
 	public void testRunning() {
-		BaleenPipeline pipeline = new BaleenPipeline("test", null, engine);
+		BaleenJob pipeline = new BaleenJob("test", null, engine);
 
 		doReturn(false).when(engine).isPaused();
 		doReturn(true).when(engine).isProcessing();
@@ -70,7 +70,7 @@ public class BaleenPipelineTest {
 
 	@Test
 	public void testStart() throws Exception {
-		BaleenPipeline pipeline = new BaleenPipeline("test", engine);
+		BaleenJob pipeline = new BaleenJob("test", engine);
 
 		// Running -> do nothing
 		doReturn(false).when(engine).isPaused();
@@ -109,7 +109,7 @@ public class BaleenPipelineTest {
 
 	@Test
 	public void testPause() throws Exception {
-		BaleenPipeline pipeline = new BaleenPipeline("test", engine);
+		BaleenJob pipeline = new BaleenJob("test", engine);
 
 		// Running -> pause
 		doReturn(false).when(engine).isPaused();
@@ -144,7 +144,7 @@ public class BaleenPipelineTest {
 
 	@Test
 	public void testStop() {
-		BaleenPipeline pipeline = new BaleenPipeline("test", engine);
+		BaleenJob pipeline = new BaleenJob("test", engine);
 
 		doReturn(true).when(engine).isPaused();
 		doReturn(true).when(engine).isProcessing();

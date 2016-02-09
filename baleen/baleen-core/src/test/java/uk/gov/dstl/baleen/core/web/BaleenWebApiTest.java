@@ -27,7 +27,7 @@ import uk.gov.dstl.baleen.exceptions.BaleenException;
 /**
  * Integration style test for {@link BaleenWebApi}.
  *
- * 
+ *
  *
  */
 @RunWith(MockitoJUnitRunner.class)
@@ -95,12 +95,12 @@ public class BaleenWebApiTest {
 
 	private String getResponse(String path) throws IOException {
 		int port = BaleenWebApi.getPort(BaleenWebApi.DEFAULT_PORT);
-		URL url = new URL("http://localhost:" +port + "/api/1" + path);
+		URL url = new URL("http://localhost:" + port + "/api/1" + path);
 		return IOUtils.toString(url.openStream());
 	}
-	
+
 	@Test
-	public void testPortFromString(){
+	public void testPortFromString() {
 		assertNull(BaleenWebApi.getPortFromString("test"));
 		assertNull(BaleenWebApi.getPortFromString("-1"));
 		assertNull(BaleenWebApi.getPortFromString("123456789"));

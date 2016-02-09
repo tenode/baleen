@@ -292,6 +292,15 @@ public class BaleenManager {
 	}
 
 	/**
+	 * Gets the job manager.
+	 *
+	 * @return the job manager
+	 */
+	public BaleenJobManager getJobManager() {
+		return jobManager;
+	}
+
+	/**
 	 * Get the YAML used to configure this instance.
 	 *
 	 * @return

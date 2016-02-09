@@ -134,7 +134,7 @@ public class BaleenPipelineManagerTest {
 
 	@Test
 	public void testCreatePipelineFromCollectionProcessingEngine() throws Exception {
-		BaleenPipeline pipeline = manager.create("test", engine);
+		BaleenJob pipeline = manager.create("test", engine);
 		assertEquals("test", pipeline.getName());
 		// Should still be stopped
 		verify(engine, never()).process();
@@ -174,7 +174,7 @@ public class BaleenPipelineManagerTest {
 	public void testRemoveBaleenPipeline() throws Exception {
 		doReturn(true).when(engine).isProcessing();
 		doReturn(false).when(engine).isPaused();
-		BaleenPipeline pipeline = manager.create("test", engine);
+		BaleenJob pipeline = manager.create("test", engine);
 
 		assertTrue(manager.remove(pipeline));
 		assertFalse(manager.get("test").isPresent());

@@ -29,7 +29,10 @@
 		{
 			"path":"/../pipelines.{format}"
 		},
-				{
+		{
+			"path":"/../jobs.{format}"
+		},
+		{
 			"path":"/../status.{format}"
 		}   
 	],

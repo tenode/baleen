@@ -48,7 +48,7 @@ public class PipelineCpeBuilderTest {
 		AnalysisEngine cp1 = (AnalysisEngine) cpe.getCasProcessors()[1];
 		assertEquals(GREEN, cp1.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COLOR));
 		assertEquals("7", cp1.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
-		assertEquals(PIPELINE, cp0.getConfigParameterValue(PipelineCpeBuilder.PIPELINE_NAME));
+		assertEquals(PIPELINE, cp1.getConfigParameterValue(PipelineCpeBuilder.PIPELINE_NAME));
 		assertEquals("annotator:uk.gov.dstl.baleen.testing.DummyAnnotator1 (2)",
 				cp1.getAnalysisEngineMetaData().getName());
 

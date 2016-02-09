@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import uk.gov.dstl.baleen.core.pipelines.BaleenPipeline;
+import uk.gov.dstl.baleen.core.pipelines.BaleenJob;
 
 /**
  * Test for {@link BaleenJob}.
@@ -100,7 +100,7 @@ public class BaleenJobTest {
 
 	@Test
 	public void testPause() throws Exception {
-		BaleenPipeline pipeline = new BaleenPipeline("test", engine);
+		BaleenJob pipeline = new BaleenJob("test", engine);
 
 		// Running -> pause
 		doReturn(false).when(engine).isPaused();
@@ -135,7 +135,7 @@ public class BaleenJobTest {
 
 	@Test
 	public void testStop() {
-		BaleenPipeline pipeline = new BaleenPipeline("test", engine);
+		BaleenJob pipeline = new BaleenJob("test", engine);
 
 		doReturn(true).when(engine).isPaused();
 		doReturn(true).when(engine).isProcessing();

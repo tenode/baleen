@@ -12,26 +12,26 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import uk.gov.dstl.baleen.core.jobs.BaleenJobManager;
 import uk.gov.dstl.baleen.core.pipelines.BaleenJob;
-import uk.gov.dstl.baleen.core.pipelines.BaleenPipelineManager;
 import uk.gov.dstl.baleen.testing.servlets.ServletCaller;
 
 /**
  * Tests for {@link BaleenManagerConfigServlet}.
  *
- * 
+ *
  *
  */
 @RunWith(MockitoJUnitRunner.class)
-public class PipelineConfigServletTest {
+public class JobConfigServletTest {
 
 	@Mock
-	BaleenPipelineManager manager;
+	BaleenJobManager manager;
 
 	@Test
 	public void testNoName() throws Exception {
 		ServletCaller caller = new ServletCaller();
-		caller.doGet(new PipelineConfigServlet(manager));
+		caller.doGet(new JobConfigServlet(manager));
 		assertEquals(400, (int) caller.getSentError());
 	}
 
@@ -40,7 +40,7 @@ public class PipelineConfigServletTest {
 		doReturn(Optional.empty()).when(manager).get(anyString());
 		ServletCaller caller = new ServletCaller();
 		caller.addParameter("name", "missing");
-		caller.doGet(new PipelineConfigServlet(manager));
+		caller.doGet(new JobConfigServlet(manager));
 		assertEquals(404, (int) caller.getSentError());
 	}
 
@@ -51,7 +51,7 @@ public class PipelineConfigServletTest {
 
 		ServletCaller caller = new ServletCaller();
 		caller.addParameter("name", "name");
-		caller.doGet(new PipelineConfigServlet(manager));
+		caller.doGet(new JobConfigServlet(manager));
 		assertEquals("", caller.getResponseBody());
 	}
 
@@ -62,7 +62,7 @@ public class PipelineConfigServletTest {
 
 		ServletCaller caller = new ServletCaller();
 		caller.addParameter("name", "name");
-		caller.doGet(new PipelineConfigServlet(manager));
+		caller.doGet(new JobConfigServlet(manager));
 		assertEquals("Config", caller.getResponseBody());
 	}
 

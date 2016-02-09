@@ -43,7 +43,7 @@ public class JobTestHelper {
 	}
 
 	public static String getCpeYamlResourceAsString() throws IOException {
-		return IOUtils.toString(PipelineCpeBuilderTest.class.getResourceAsStream("job_no_schedule.yaml"));
+		return IOUtils.toString(PipelineCpeBuilderTest.class.getResourceAsStream("job_task_class.yaml"));
 	}
 
 	public static URL getCpeWithExternalResourceYamlResource() {
