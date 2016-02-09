@@ -275,23 +275,36 @@ public abstract class AbstractCpeBuilder {
 		}
 
 		for (String key : config.keySet()) {
-
 			Object v = config.get(key);
-
-			if (v instanceof Map) {
-				// Flatten global configuration
-				Map<String, Object> subconfig = (Map<String, Object>) v;
-				for (String subkey : subconfig.keySet()) {
-					Object value = subconfig.get(subkey);
-					if (value instanceof String) {
-						globalConfig.put(key + "." + subkey, value);
-					}
-				}
-			} else if (v instanceof String) {
-				globalConfig.put(key, v);
-
-			}
+			addKeyValueToGlobalConfig(key, v);
 		}
+	}
+
+	/**
+	 * Recursively the key value to the global config.
+	 *
+	 * Does not work for lists/arrays (deliberately)
+	 *
+	 * @param key
+	 *            the key
+	 * @param value
+	 *            the value
+	 */
+	private void addKeyValueToGlobalConfig(String key, Object value) {
+		if (value == null) {
+			// Ignore
+		} else if (value instanceof Map) {
+			// Flatten global configuration
+			Map<String, Object> subconfig = (Map<String, Object>) value;
+			for (String subkey : subconfig.keySet()) {
+				addKeyValueToGlobalConfig(key + "." + subkey, subconfig.get(subkey));
+			}
+		} else if (value instanceof String) {
+			globalConfig.put(key, value);
+		} else if (value instanceof Number || value instanceof Boolean) {
+			globalConfig.put(key, value.toString());
+		}
+
 	}
 
 	/**
