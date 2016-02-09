@@ -10,8 +10,8 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 
 /** A pointer to another annotation in the same document. Designed for general use (eg temporary working inside annotator) rather than having some specific semantic meaning (eg like coreference).
- * Updated by JCasGen Mon Jan 25 12:00:49 GMT 2016
- * XML source: /home/chrisflatley/Tenode/Projects/baleen/baleen/baleen-uima/src/main/resources/types/language_type_system.xml
+ * Updated by JCasGen Tue Feb 09 15:04:47 GMT 2016
+ * XML source: /home/chrisflatley/Tenode/Projects/baleen/baleen/baleen-uima/src/main/resources/types/base_type_system.xml
  * @generated */
 public class Pointer extends BaleenAnnotation {
   /** @generated
@@ -95,6 +95,28 @@ public class Pointer extends BaleenAnnotation {
     if (Pointer_Type.featOkTst && ((Pointer_Type)jcasType).casFeat_target == null)
       jcasType.jcas.throwFeatMissing("target", "uk.gov.dstl.baleen.types.Pointer");
     jcasType.ll_cas.ll_setRefValue(addr, ((Pointer_Type)jcasType).casFeatCode_target, jcasType.ll_cas.ll_getFSRef(v));}    
+   
+    
+  //*--------------*
+  //* Feature: targetId
+
+  /** getter for targetId - gets USed to reference a (Baleen) annotation by its internal id. Useful for if you are pointing to a different jCas (in which case you can't use target)
+   * @generated
+   * @return value of the feature 
+   */
+  public long getTargetId() {
+    if (Pointer_Type.featOkTst && ((Pointer_Type)jcasType).casFeat_targetId == null)
+      jcasType.jcas.throwFeatMissing("targetId", "uk.gov.dstl.baleen.types.Pointer");
+    return jcasType.ll_cas.ll_getLongValue(addr, ((Pointer_Type)jcasType).casFeatCode_targetId);}
+    
+  /** setter for targetId - sets USed to reference a (Baleen) annotation by its internal id. Useful for if you are pointing to a different jCas (in which case you can't use target) 
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setTargetId(long v) {
+    if (Pointer_Type.featOkTst && ((Pointer_Type)jcasType).casFeat_targetId == null)
+      jcasType.jcas.throwFeatMissing("targetId", "uk.gov.dstl.baleen.types.Pointer");
+    jcasType.ll_cas.ll_setLongValue(addr, ((Pointer_Type)jcasType).casFeatCode_targetId, v);}    
   }
 
     
