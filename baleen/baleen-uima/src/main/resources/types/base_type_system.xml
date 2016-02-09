@@ -80,6 +80,11 @@ This XML file classified as UK OFFICIAL.</description>
           <description>At target annotation to which this pointer refers.</description>
           <rangeTypeName>uk.gov.dstl.baleen.types.BaleenAnnotation</rangeTypeName>
         </featureDescription>
+      <featureDescription>
+          <name>targetId</name>
+          <description>USed to reference a (Baleen) annotation by its internal id. Useful for if you are pointing to a different jCas (in which case you can't use target)</description>
+          <rangeTypeName>uima.cas.Long</rangeTypeName>
+        </featureDescription>
       </features>
     </typeDescription>
   </types>

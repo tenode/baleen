@@ -13,7 +13,7 @@ import org.apache.uima.cas.impl.FeatureImpl;
 import org.apache.uima.cas.Feature;
 
 /** A pointer to another annotation in the same document. Designed for general use (eg temporary working inside annotator) rather than having some specific semantic meaning (eg like coreference).
- * Updated by JCasGen Mon Jan 25 12:00:49 GMT 2016
+ * Updated by JCasGen Tue Feb 09 15:04:47 GMT 2016
  * @generated */
 public class Pointer_Type extends BaleenAnnotation_Type {
   /** @generated 
@@ -68,6 +68,30 @@ public class Pointer_Type extends BaleenAnnotation_Type {
     ll_cas.ll_setRefValue(addr, casFeatCode_target, v);}
     
   
+ 
+  /** @generated */
+  final Feature casFeat_targetId;
+  /** @generated */
+  final int     casFeatCode_targetId;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public long getTargetId(int addr) {
+        if (featOkTst && casFeat_targetId == null)
+      jcas.throwFeatMissing("targetId", "uk.gov.dstl.baleen.types.Pointer");
+    return ll_cas.ll_getLongValue(addr, casFeatCode_targetId);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setTargetId(int addr, long v) {
+        if (featOkTst && casFeat_targetId == null)
+      jcas.throwFeatMissing("targetId", "uk.gov.dstl.baleen.types.Pointer");
+    ll_cas.ll_setLongValue(addr, casFeatCode_targetId, v);}
+    
+  
 
 
 
@@ -83,6 +107,10 @@ public class Pointer_Type extends BaleenAnnotation_Type {
  
     casFeat_target = jcas.getRequiredFeatureDE(casType, "target", "uk.gov.dstl.baleen.types.BaleenAnnotation", featOkTst);
     casFeatCode_target  = (null == casFeat_target) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_target).getCode();
+
+ 
+    casFeat_targetId = jcas.getRequiredFeatureDE(casType, "targetId", "uima.cas.Long", featOkTst);
+    casFeatCode_targetId  = (null == casFeat_targetId) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_targetId).getCode();
 
   }
 }
