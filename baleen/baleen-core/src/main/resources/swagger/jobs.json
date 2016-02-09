@@ -8,7 +8,7 @@
 				{
 					"httpMethod":"GET",
 					"nickname":"getJob",
-					"type":"Job,
+					"type":"Job",
 					"parameters":[
 						{
 							"paramType":"query",
