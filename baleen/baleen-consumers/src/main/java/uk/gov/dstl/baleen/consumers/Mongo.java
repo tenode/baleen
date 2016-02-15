@@ -17,19 +17,6 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.DocumentAnnotation;
 import org.apache.uima.resource.ResourceInitializationException;
 
-import uk.gov.dstl.baleen.consumers.utils.ConsumerUtils;
-import uk.gov.dstl.baleen.consumers.utils.EntityRelationConverter;
-import uk.gov.dstl.baleen.consumers.utils.IEntityConverterFields;
-import uk.gov.dstl.baleen.consumers.utils.mongo.MongoFields;
-import uk.gov.dstl.baleen.resources.SharedMongoResource;
-import uk.gov.dstl.baleen.types.metadata.Metadata;
-import uk.gov.dstl.baleen.types.metadata.PublishedId;
-import uk.gov.dstl.baleen.types.semantic.Entity;
-import uk.gov.dstl.baleen.types.semantic.ReferenceTarget;
-import uk.gov.dstl.baleen.types.semantic.Relation;
-import uk.gov.dstl.baleen.uima.BaleenConsumer;
-import uk.gov.dstl.baleen.uima.utils.UimaTypesUtils;
-
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.mongodb.BasicDBList;
@@ -38,12 +25,32 @@ import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 
+import uk.gov.dstl.baleen.consumers.utils.ConsumerUtils;
+import uk.gov.dstl.baleen.consumers.utils.EntityRelationConverter;
+import uk.gov.dstl.baleen.consumers.utils.IEntityConverterFields;
+import uk.gov.dstl.baleen.consumers.utils.mongo.MongoFields;
+import uk.gov.dstl.baleen.resources.SharedMongoResource;
+import uk.gov.dstl.baleen.types.metadata.Metadata;
+import uk.gov.dstl.baleen.types.metadata.PublishedId;
+import uk.gov.dstl.baleen.types.semantic.ComplexEvent;
+import uk.gov.dstl.baleen.types.semantic.Entity;
+import uk.gov.dstl.baleen.types.semantic.ReferenceTarget;
+import uk.gov.dstl.baleen.types.semantic.Relation;
+import uk.gov.dstl.baleen.uima.BaleenConsumer;
+import uk.gov.dstl.baleen.uima.utils.UimaTypesUtils;
+
 /**
  * Output processed CAS object into MongoDB.
- * 
- * <p>This consumer will output to Mongo using the new Baleen schema, which consists of 3 collections with the formats described below.
- * For each CAS processed, any existing reference to a document with the same external ID is deleted.</p>
- * <p><b>documents</b></p>
+ *
+ * <p>
+ * This consumer will output to Mongo using the new Baleen schema, which consists of 3 collections
+ * with the formats described below. For each CAS processed, any existing reference to a document
+ * with the same external ID is deleted.
+ * </p>
+ * <p>
+ * <b>documents</b>
+ * </p>
+ *
  * <pre>
 {
     document: {
@@ -64,14 +71,19 @@ import com.mongodb.DBCollection;
     externalId
 }
  * </pre>
- * 
- * <p><b>entities</b></p>
- * <p>Entities are grouped by their reference target, so all the entities in one Mongo document refer to the same thing.
- * Additional fields may be present depending on the entity type.</p>
+ *
+ * <p>
+ * <b>entities</b>
+ * </p>
+ * <p>
+ * Entities are grouped by their reference target, so all the entities in one Mongo document refer
+ * to the same thing. Additional fields may be present depending on the entity type.
+ * </p>
+ *
  * <pre>
 {
     docId,
-    entities: [ 
+    entities: [
         {
             confidence,
             externalId,
@@ -84,10 +96,17 @@ import com.mongodb.DBCollection;
     ]
 }
  * </pre>
- * 
- * <p><b>relations</b></p>
- * <p>Relations link two entities that are stored in the <em>entities</em> collection, which are referred to by their externalId.</p>
- * Additional fields may be present depending on the relation type.</p>
+ *
+ * <p>
+ * <b>relations</b>
+ * </p>
+ * <p>
+ * Relations link two entities that are stored in the <em>entities</em> collection, which are
+ * referred to by their externalId.
+ * </p>
+ * Additional fields may be present depending on the relation type.
+ * </p>
+ *
  * <pre>
 {
     docId,
@@ -104,13 +123,13 @@ import com.mongodb.DBCollection;
 }
  * </pre>
  *
- * 
+ *
  * @baleen.javadoc
  */
 public class Mongo extends BaleenConsumer {
 	/**
 	 * Connection to Mongo
-	 * 
+	 *
 	 * @baleen.resource uk.gov.dstl.baleen.resources.SharedMongoResource
 	 */
 	public static final String KEY_MONGO = "mongo";
@@ -118,27 +137,27 @@ public class Mongo extends BaleenConsumer {
 	private SharedMongoResource mongoResource;
 
 	/**
-	 * Should a hash of the content be used to generate the ID?
-	 * If false, then a hash of the Source URI is used instead.
-	 * 
+	 * Should a hash of the content be used to generate the ID? If false, then a hash of the Source
+	 * URI is used instead.
+	 *
 	 * @baleen.config true
 	 */
 	public static final String PARAM_CONTENT_HASH_AS_ID = "contentHashAsId";
 	@ConfigurationParameter(name = PARAM_CONTENT_HASH_AS_ID, defaultValue = "true")
-	private boolean contentHashAsId = true;
+	private final boolean contentHashAsId = true;
 
 	/**
 	 * Should we output the history to Mongo?
-	 * 
+	 *
 	 * @baleen.config false
 	 */
 	public static final String PARAM_OUTPUT_HISTORY = "outputHistory";
-	@ConfigurationParameter(name = PARAM_OUTPUT_HISTORY,  defaultValue = "false")
-	private boolean outputHistory = false;
+	@ConfigurationParameter(name = PARAM_OUTPUT_HISTORY, defaultValue = "false")
+	private final boolean outputHistory = false;
 
 	/**
 	 * The collection to output entities to
-	 * 
+	 *
 	 * @baleen.config entities
 	 */
 	public static final String PARAM_ENTITIES_COLLECTION = "entities";
@@ -147,7 +166,7 @@ public class Mongo extends BaleenConsumer {
 
 	/**
 	 * The collection to output relationships to
-	 * 
+	 *
 	 * @baleen.config relations
 	 */
 	public static final String PARAM_RELATIONS_COLLECTION = "relations";
@@ -155,8 +174,17 @@ public class Mongo extends BaleenConsumer {
 	private String relationsCollectionName;
 
 	/**
+	 * The collection to output events to
+	 *
+	 * @baleen.config events
+	 */
+	public static final String PARAM_EVENTS_COLLECTION = "events";
+	@ConfigurationParameter(name = PARAM_EVENTS_COLLECTION, defaultValue = "events")
+	private String eventsCollectionName;
+
+	/**
 	 * The collection to output documents to
-	 * 
+	 *
 	 * @baleen.config documents
 	 */
 	public static final String PARAM_DOCUMENTS_COLLECTION = "documents";
@@ -165,12 +193,12 @@ public class Mongo extends BaleenConsumer {
 
 	/**
 	 * Should we output the document content to Mongo?
-	 * 
+	 *
 	 * @baleen.config true
 	 */
 	public static final String PARAM_OUTPUT_CONTENT = "outputContent";
 	@ConfigurationParameter(name = PARAM_OUTPUT_CONTENT, defaultValue = "true")
-	private boolean outputContent = false;
+	private final boolean outputContent = false;
 
 	private DBCollection entitiesCollection;
 
@@ -178,13 +206,16 @@ public class Mongo extends BaleenConsumer {
 
 	private DBCollection documentsCollection;
 
+	private DBCollection eventsCollection;
+
 	/**
-	 * Holds the types of features that we're not interested in persisting  (stuff from UIMA for example)
-	 * We're storing these so that we can loop through the features (and then ignore some of them)
+	 * Holds the types of features that we're not interested in persisting (stuff from UIMA for
+	 * example) We're storing these so that we can loop through the features (and then ignore some
+	 * of them)
 	 */
 	private Set<String> stopFeatures;
-	
-	//Fields
+
+	// Fields
 	public static final String FIELD_DOCUMENT_ID = "docId";
 	public static final String FIELD_ENTITIES = "entities";
 	public static final String FIELD_DOCUMENT = "document";
@@ -200,8 +231,8 @@ public class Mongo extends BaleenConsumer {
 	public static final String FIELD_PUBLISHEDIDS_TYPE = "type";
 	public static final String FIELD_METADATA = "metadata";
 	public static final String FIELD_CONTENT = "content";
-	
-	//Entity fields are defined in MongoFields()
+
+	// Entity fields are defined in MongoFields()
 	private final IEntityConverterFields fields = new MongoFields();
 
 	/**
@@ -213,12 +244,14 @@ public class Mongo extends BaleenConsumer {
 		entitiesCollection = db.getCollection(entitiesCollectionName);
 		relationsCollection = db.getCollection(relationsCollectionName);
 		documentsCollection = db.getCollection(documentsCollectionName);
+		eventsCollection = db.getCollection(eventsCollectionName);
 
 		documentsCollection.createIndex(new BasicDBObject(fields.getExternalId(), 1));
 		entitiesCollection.createIndex(new BasicDBObject(fields.getExternalId(), 1));
 		relationsCollection.createIndex(new BasicDBObject(fields.getExternalId(), 1));
 		relationsCollection.createIndex(new BasicDBObject(FIELD_DOCUMENT_ID, 1));
 		entitiesCollection.createIndex(new BasicDBObject(FIELD_DOCUMENT_ID, 1));
+		eventsCollection.createIndex(new BasicDBObject(FIELD_DOCUMENT_ID, 1));
 
 		stopFeatures = new HashSet<>();
 		stopFeatures.add("uima.cas.AnnotationBase:sofa");
@@ -230,6 +263,7 @@ public class Mongo extends BaleenConsumer {
 		entitiesCollection = null;
 		relationsCollection = null;
 		documentsCollection = null;
+		eventsCollection = null;
 	}
 
 	protected String getUniqueId(JCas jCas) {
@@ -247,11 +281,13 @@ public class Mongo extends BaleenConsumer {
 		saveDocument(documentId, jCas);
 		saveEntities(documentId, jCas);
 		saveRelations(documentId, jCas);
+		saveEvents(documentId, jCas);
 	}
 
 	private void deleteAllContent(String documentId) {
 		entitiesCollection.remove(new BasicDBObject(FIELD_DOCUMENT_ID, documentId));
 		relationsCollection.remove(new BasicDBObject(FIELD_DOCUMENT_ID, documentId));
+		eventsCollection.remove(new BasicDBObject(FIELD_DOCUMENT_ID, documentId));
 		documentsCollection.remove(new BasicDBObject(fields.getExternalId(), documentId));
 	}
 
@@ -278,7 +314,7 @@ public class Mongo extends BaleenConsumer {
 		// Published Ids
 
 		BasicDBList list = new BasicDBList();
-		for(PublishedId pid : JCasUtil.select(jCas, PublishedId.class)) {
+		for (PublishedId pid : JCasUtil.select(jCas, PublishedId.class)) {
 			list.add(new BasicDBObject(FIELD_PUBLISHEDIDS_TYPE, pid.getPublishedIdType())
 					.append(FIELD_PUBLISHEDIDS_ID, pid.getValue()));
 		}
@@ -286,10 +322,11 @@ public class Mongo extends BaleenConsumer {
 
 		// Meta data
 
-		Multimap<String,Object> meta = MultimapBuilder.linkedHashKeys().linkedListValues().build();
-		for(Metadata metadata : JCasUtil.select(jCas, Metadata.class)) {
+		Multimap<String, Object> meta = MultimapBuilder.linkedHashKeys().linkedListValues().build();
+		for (Metadata metadata : JCasUtil.select(jCas, Metadata.class)) {
 			String key = metadata.getKey();
-			if(key.contains(".")){	//Field names can't contain a "." in Mongo, so replace with a _
+			if (key.contains(".")) { // Field names can't contain a "." in Mongo, so replace with a
+										// _
 				key = key.replaceAll("\\.", "_");
 			}
 			meta.put(key, metadata.getValue());
@@ -298,7 +335,7 @@ public class Mongo extends BaleenConsumer {
 
 		// Add content is requried
 
-		if(outputContent) {
+		if (outputContent) {
 			builder.append(FIELD_CONTENT, jCas.getDocumentText());
 		}
 
@@ -310,14 +347,15 @@ public class Mongo extends BaleenConsumer {
 	}
 
 	private void saveEntities(String documentId, JCas jCas) {
-		EntityRelationConverter converter = new EntityRelationConverter(getMonitor(), outputHistory, getSupport().getDocumentHistory(jCas), stopFeatures, fields);
+		EntityRelationConverter converter = new EntityRelationConverter(getMonitor(), outputHistory,
+				getSupport().getDocumentHistory(jCas), stopFeatures, fields);
 
 		// Compile all the reference targets together
 
 		Multimap<ReferenceTarget, Entity> targetted = MultimapBuilder.hashKeys().linkedListValues().build();
-		for(Entity entity : JCasUtil.select(jCas, Entity.class)) {
+		for (Entity entity : JCasUtil.select(jCas, Entity.class)) {
 
-			if( entity.getReferent() != null ) {
+			if (entity.getReferent() != null) {
 				targetted.put(entity.getReferent(), entity);
 			} else {
 				// Create a fake reference target
@@ -325,11 +363,11 @@ public class Mongo extends BaleenConsumer {
 			}
 		}
 
-		for(Entry<ReferenceTarget, Collection<Entity>> entry : targetted.asMap().entrySet()) {
+		for (Entry<ReferenceTarget, Collection<Entity>> entry : targetted.asMap().entrySet()) {
 
 			BasicDBList list = new BasicDBList();
 
-			for(Entity e : entry.getValue()) {
+			for (Entity e : entry.getValue()) {
 				list.add(converter.convertEntity(e));
 			}
 
@@ -341,16 +379,30 @@ public class Mongo extends BaleenConsumer {
 		}
 
 	}
-	
+
 	private void saveRelations(String documentId, JCas jCas) {
-		EntityRelationConverter converter = new EntityRelationConverter(getMonitor(), outputHistory, getSupport().getDocumentHistory(jCas), stopFeatures, fields);
-		
-		for(Relation r : JCasUtil.select(jCas, Relation.class)){
+		EntityRelationConverter converter = new EntityRelationConverter(getMonitor(), outputHistory,
+				getSupport().getDocumentHistory(jCas), stopFeatures, fields);
+
+		for (Relation r : JCasUtil.select(jCas, Relation.class)) {
 			Map<String, Object> relationFeatures = converter.convertRelation(r);
 			BasicDBObjectBuilder builder = BasicDBObjectBuilder.start(relationFeatures);
-			
+
 			builder.add(FIELD_DOCUMENT_ID, documentId);
 			relationsCollection.save(builder.get());
+		}
+	}
+
+	private void saveEvents(String documentId, JCas jCas) {
+		EntityRelationConverter converter = new EntityRelationConverter(getMonitor(), outputHistory,
+				getSupport().getDocumentHistory(jCas), stopFeatures, fields);
+
+		for (ComplexEvent e : JCasUtil.select(jCas, ComplexEvent.class)) {
+			Map<String, Object> eventFeatures = converter.convertEvent(e);
+			BasicDBObjectBuilder builder = BasicDBObjectBuilder.start(eventFeatures);
+
+			builder.add(FIELD_DOCUMENT_ID, documentId);
+			eventsCollection.save(builder.get());
 		}
 	}
 }
