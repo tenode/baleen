@@ -176,8 +176,11 @@ public class EntityRelationConverter {
 		List<String> entities = new ArrayList<>();
 
 		for (int x = 0; x < entityArray.size(); x++) {
-			Entity ent = (Entity) entityArray.get(x);
-			entities.add(ent.getExternalId());
+			FeatureStructure featureStructure = entityArray.get(x);
+			if (featureStructure instanceof Entity) {
+				Entity ent = (Entity) featureStructure;
+				entities.add(ent.getExternalId());
+			}
 		}
 		
 		return entities;
