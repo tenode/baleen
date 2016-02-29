@@ -22,11 +22,6 @@ This XML file classified as UK OFFICIAL.</description>
           <rangeTypeName>uima.cas.String</rangeTypeName>
         </featureDescription>
         <featureDescription>
-          <name>referent</name>
-          <description>Can be used to link a corefence to an entity to another (presuambly more definitive) mention of the same entity elsewhere in the text.</description>
-          <rangeTypeName>uk.gov.dstl.baleen.types.semantic.ReferenceTarget</rangeTypeName>
-        </featureDescription>
-        <featureDescription>
           <name>subType</name>
           <description>String identifying sub type of entity.</description>
           <rangeTypeName>uima.cas.String</rangeTypeName>
@@ -106,11 +101,6 @@ Additional relationship types that have been added: {"QUANTITY", "ALIAS"}</descr
           <rangeTypeName>uk.gov.dstl.baleen.types.semantic.Temporal</rangeTypeName>
         </featureDescription>
       </features>
-    </typeDescription>
-  <typeDescription>
-      <name>uk.gov.dstl.baleen.types.semantic.ReferenceTarget</name>
-      <description>A target type for the referent property, such that entities pointing to the same target are assumed to be coreferences. The target can therefore be thought of as a super-entity, though it has no properties or value of it's own. The span of this entity is taken to be the scope in which this reference target is valid.</description>
-      <supertypeName>uima.tcas.Annotation</supertypeName>
     </typeDescription>
     <typeDescription>
       <name>uk.gov.dstl.baleen.types.semantic.ComplexEvent</name>
