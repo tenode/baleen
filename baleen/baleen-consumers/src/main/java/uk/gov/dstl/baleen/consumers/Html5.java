@@ -275,8 +275,8 @@ public class Html5 extends BaleenConsumer {
 	}
 
 	private String generateSpanStart(Entity e) {
-		return "<span class=\"baleen-entity " + e.getClass().getSimpleName() + "\" id=\"" + e.getExternalId()
-				+ "\" value=\""
-				+ e.getValue().replaceAll("\"", "'") + "\" >";
+		String value = e.getValue() == null ? "" : e.getValue().replaceAll("\"", "'");
+		return String.format("<span class=\"baleen %s\" id=\"%s\" value=\"%s\" >", e.getClass().getSimpleName(),
+				e.getExternalId(), value);
 	}
 }
