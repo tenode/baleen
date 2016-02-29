@@ -345,5 +345,6 @@
 		<module>baleen-runner</module>
 		<module>baleen-history</module>
 		<module>baleen-javadoc</module>
+		<module>baleen-jobs</module>
 	</modules>
 </project>
