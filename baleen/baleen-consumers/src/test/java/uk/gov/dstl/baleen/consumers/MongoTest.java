@@ -24,8 +24,14 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.impl.CustomResourceSpecifier_impl;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 
 import uk.gov.dstl.baleen.consumers.utils.IEntityConverterFields;
 import uk.gov.dstl.baleen.consumers.utils.mongo.MongoFields;
@@ -47,11 +53,7 @@ import uk.gov.dstl.baleen.types.semantic.Relation;
 import uk.gov.dstl.baleen.types.temporal.DateType;
 import uk.gov.dstl.baleen.uima.utils.UimaTypesUtils;
 
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-
+@Ignore
 public class MongoTest extends ConsumerTestBase {
 
 	private static final String LONDON = "London";
