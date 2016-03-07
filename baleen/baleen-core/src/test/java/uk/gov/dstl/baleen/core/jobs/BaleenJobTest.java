@@ -3,11 +3,14 @@ package uk.gov.dstl.baleen.core.jobs;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
+
+import java.io.File;
 
 import org.apache.uima.collection.CollectionProcessingEngine;
 import org.junit.Test;
@@ -30,6 +33,25 @@ public class BaleenJobTest {
 
 	@Mock
 	CollectionProcessingEngine engine;
+
+	@Test
+	public void testConstructors() {
+		BaleenJob a = new BaleenJob("test", engine);
+		BaleenJob b = new BaleenJob("test", "yaml", new File("test.yaml"), engine);
+		BaleenJob c = new BaleenJob("test", "yaml", engine);
+
+		assertEquals("test", a.getName());
+		assertEquals("test", b.getName());
+		assertEquals("test", c.getName());
+
+		assertNull(a.getSource());
+		assertNull(c.getSource());
+		assertEquals("test.yaml", b.getSource().getName());
+
+		assertFalse(a.getYaml().isPresent());
+		assertEquals("yaml", b.getYaml().get());
+		assertEquals("yaml", c.getYaml().get());
+	}
 
 	@Test
 	public void testGetName() {

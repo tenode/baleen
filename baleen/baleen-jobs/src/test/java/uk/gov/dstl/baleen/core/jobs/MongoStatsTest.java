@@ -3,6 +3,7 @@ package uk.gov.dstl.baleen.core.jobs;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
@@ -45,6 +46,37 @@ public class MongoStatsTest extends AbstractBaleenTaskTest {
 			List<String> lines = Files.readAllLines(tempFile.toPath());
 			assertEquals(2, lines.size());
 			assertEquals("timestamp,documents,entities,relations", lines.get(0));
+
+			String[] split = lines.get(1).split(",");
+			assertEquals("3", split[1]);
+			assertEquals("0", split[2]);
+			assertEquals("0", split[3]);
+		} finally {
+			tempFile.delete();
+		}
+	}
+
+	@Test
+	public void testWritingToExistingFile()
+			throws ResourceInitializationException, AnalysisEngineProcessException, IOException {
+		// Due to limitations in the shared fongo resource we only test document count here!
+		ExternalResourceDescription erd = ExternalResourceFactory.createExternalResourceDescription("mongo",
+				SharedFongoResource.class, SharedFongoResource.PARAM_FONGO_COLLECTION, "documents",
+				SharedFongoResource.PARAM_FONGO_DATA, JSON.serialize(DATA));
+
+		File tempFile = File.createTempFile("test", "mongostats-existing");
+		try (FileWriter fileWriter = new FileWriter(tempFile)) {
+			fileWriter.write("hello\n");
+		}
+
+		try {
+
+			AnalysisEngine task = create(MongoStats.class, "mongo", erd, "file", tempFile.getAbsolutePath());
+			execute(task);
+
+			List<String> lines = Files.readAllLines(tempFile.toPath());
+			assertEquals(2, lines.size());
+			assertEquals("hello", lines.get(0));
 
 			String[] split = lines.get(1).split(",");
 			assertEquals("3", split[1]);
