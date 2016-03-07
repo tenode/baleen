@@ -21,12 +21,11 @@ import uk.gov.dstl.baleen.uima.jobs.JobSettings;
 /**
  * A task which outputs statistics on the Mongo database.
  *
- * Statistics are saved to a CSV file (specified through the confugration parameter 'file').
+ * Statistics are saved to a CSV file (specified through the configuration parameter 'file').
  *
- * Typically this task will be used with a FixedRate schedulder for say hourly information:
+ * Typically this task will be used with a FixedRate scheduler for say hourly information:
  *
  * <pre>
- *
  * mongo:
  *   host: localhost
  *   port: 27017
