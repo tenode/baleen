@@ -118,6 +118,11 @@ public class JobSettings {
 		}
 	}
 
+	/**
+	 * Get all the keys
+	 *
+	 * @return the stream
+	 */
 	public Stream<String> keys() {
 		return JCasUtil.select(jCas, Metadata.class).stream()
 				.map(m -> m.getKey());
