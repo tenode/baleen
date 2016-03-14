@@ -6,7 +6,6 @@ import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import uk.gov.dstl.baleen.exceptions.BaleenException;
@@ -68,7 +67,6 @@ public class BaleenTaskTest extends AbstractBaleenTaskTest {
 	// TODO: This fails (there is no key of that name) which implies that the JobSetting JCas
 	// does not work (metadata values not pushed between tasks
 	@Test
-	@Ignore
 	public void fullTestWithTwoTasks()
 			throws ResourceInitializationException, AnalysisEngineProcessException, BaleenException,
 			InterruptedException {
@@ -86,7 +84,7 @@ public class BaleenTaskTest extends AbstractBaleenTaskTest {
 		// JCasUtil.select(getJCas(), BaleenAnnotation.class).stream().forEach(a ->
 		// System.out.println(a.getType()));
 
-		assertEquals("value", CounterTask.getLastSettings().get("key").get());
+		assertEquals("value", CounterTask.getLastSettingsForKey().get());
 	}
 
 }

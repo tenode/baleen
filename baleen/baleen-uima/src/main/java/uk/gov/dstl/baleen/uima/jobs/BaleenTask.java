@@ -9,6 +9,7 @@ import org.apache.uima.resource.ResourceInitializationException;
 import uk.gov.dstl.baleen.uima.UimaMonitor;
 import uk.gov.dstl.baleen.uima.utils.UimaUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * A discrete task within Baleen which forms part of a job.
  *
@@ -24,8 +25,16 @@ import uk.gov.dstl.baleen.uima.utils.UimaUtils;
  *
  */
 public abstract class BaleenTask extends JCasAnnotator_ImplBase {
+
+	/** The monitor. */
 	private UimaMonitor monitor;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.uima.fit.component.JCasAnnotator_ImplBase#initialize(org.apache.uima.UimaContext)
+	 */
 	@Override
 	public void initialize(final UimaContext context) throws ResourceInitializationException {
 		// This will do initialization of resources,
@@ -42,6 +51,13 @@ public abstract class BaleenTask extends JCasAnnotator_ImplBase {
 		monitor.finishFunction("initialize");
 	}
 
+	/**
+	 * Creates the monitor.
+	 *
+	 * @param pipelineName
+	 *            the pipeline name
+	 * @return the uima monitor
+	 */
 	protected UimaMonitor createMonitor(final String pipelineName) {
 		return new UimaMonitor(pipelineName, this.getClass());
 	}
@@ -52,11 +68,19 @@ public abstract class BaleenTask extends JCasAnnotator_ImplBase {
 	 *
 	 * @param aContext
 	 *            UimaContext object passed by the Collection Processing Engine
+	 * @throws ResourceInitializationException
+	 *             the resource initialization exception
 	 */
 	public void doInitialize(final UimaContext aContext) throws ResourceInitializationException {
 		// Do nothing - this should be overridden in most cases
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.uima.analysis_component.JCasAnnotator_ImplBase#process(org.apache.uima.jcas.JCas)
+	 */
 	@Override
 	public final void process(final JCas aJCas) throws AnalysisEngineProcessException {
 		monitor.startFunction("execute");
@@ -73,9 +97,15 @@ public abstract class BaleenTask extends JCasAnnotator_ImplBase {
 	 * @param settings
 	 *            the job settings to run with
 	 * @throws AnalysisEngineProcessException
+	 *             the analysis engine process exception
 	 */
 	protected abstract void execute(JobSettings settings) throws AnalysisEngineProcessException;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.uima.analysis_component.AnalysisComponent_ImplBase#destroy()
+	 */
 	@Override
 	public void destroy() {
 		monitor.startFunction("destroy");
