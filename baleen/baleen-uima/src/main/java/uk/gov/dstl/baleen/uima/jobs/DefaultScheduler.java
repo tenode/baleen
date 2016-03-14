@@ -1,14 +1,19 @@
 package uk.gov.dstl.baleen.uima.jobs;
 
-import uk.gov.dstl.baleen.uima.jobs.BaleenScheduler;
-
+// TODO: Auto-generated Javadoc
 /**
  * A scheduler which will run a job once, and then stop it.
  */
 public class DefaultScheduler extends BaleenScheduler {
 
+	/** The has run. */
 	private boolean hasRun = false;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see uk.gov.dstl.baleen.uima.jobs.BaleenScheduler#await()
+	 */
 	@Override
 	protected boolean await() {
 		if (hasRun) {

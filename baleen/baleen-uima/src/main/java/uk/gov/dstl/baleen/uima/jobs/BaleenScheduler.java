@@ -15,6 +15,7 @@ import uk.gov.dstl.baleen.core.metrics.MetricsFactory;
 import uk.gov.dstl.baleen.uima.UimaMonitor;
 import uk.gov.dstl.baleen.uima.utils.UimaUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * Base class for Baleen Job Schedulers.
  *
@@ -40,10 +41,19 @@ import uk.gov.dstl.baleen.uima.utils.UimaUtils;
  * @baleen.javadoc
  */
 public abstract class BaleenScheduler extends JCasCollectionReader_ImplBase {
+
+	/** The monitor. */
 	private UimaMonitor monitor;
 
+	/** The config. */
 	private Map<String, String> config;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.uima.fit.component.JCasCollectionReader_ImplBase#initialize(org.apache.uima.
+	 * UimaContext)
+	 */
 	@Override
 	public final void initialize(final UimaContext context) throws ResourceInitializationException {
 		// This will do initialization of resources,
@@ -70,11 +80,20 @@ public abstract class BaleenScheduler extends JCasCollectionReader_ImplBase {
 	 *
 	 * @param context
 	 *            The UimaContext for the collection reader
+	 * @throws ResourceInitializationException
+	 *             the resource initialization exception
 	 */
 	protected void doInitialize(final UimaContext context) throws ResourceInitializationException {
 		// Do nothing by default
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.apache.uima.fit.component.JCasCollectionReader_ImplBase#getNext(org.apache.uima.jcas.
+	 * JCas)
+	 */
 	@Override
 	public final void getNext(final JCas jCas) throws IOException, CollectionException {
 		getMonitor().startFunction("getNext");
@@ -94,11 +113,19 @@ public abstract class BaleenScheduler extends JCasCollectionReader_ImplBase {
 	/**
 	 * Called when the collection reader has finished and is closing down. Any open resources, for
 	 * example, should be closed at this point.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	protected void doDestroy() throws IOException {
 		// Do nothing
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.uima.collection.CollectionReader_ImplBase#destroy()
+	 */
 	@Override
 	public void destroy() {
 		super.destroy();
@@ -109,6 +136,11 @@ public abstract class BaleenScheduler extends JCasCollectionReader_ImplBase {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.uima.collection.base_cpm.BaseCollectionReader#getProgress()
+	 */
 	@Override
 	public Progress[] getProgress() {
 		return new Progress[0];
@@ -118,6 +150,12 @@ public abstract class BaleenScheduler extends JCasCollectionReader_ImplBase {
 	 * Override of the UIMA hasNext() method with logic to continuously check for new documents
 	 * until one is found. This prevents the collection reader from exiting (unless asked to), and
 	 * so creates a persistent collection reader and pipeline.
+	 *
+	 * @return true, if successful
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws CollectionException
+	 *             the collection exception
 	 */
 	@Override
 	public final boolean hasNext() throws IOException, CollectionException {
@@ -133,6 +171,11 @@ public abstract class BaleenScheduler extends JCasCollectionReader_ImplBase {
 	 */
 	protected abstract boolean await();
 
+	/**
+	 * Gets the monitor.
+	 *
+	 * @return the monitor
+	 */
 	protected final UimaMonitor getMonitor() {
 		return monitor;
 	}

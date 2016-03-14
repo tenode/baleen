@@ -161,6 +161,5 @@ This XML file classified as UK OFFICIAL.</description>
         <rangeTypeName>uima.cas.String</rangeTypeName>
       </featureDescription>      
     </typeDescription>
-
   </types>
 </typeSystemDescription>
