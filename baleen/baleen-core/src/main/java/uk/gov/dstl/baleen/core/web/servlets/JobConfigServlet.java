@@ -10,12 +10,18 @@ import uk.gov.dstl.baleen.core.jobs.BaleenJobManager;
  * Requires 'config.jobs' role if security is enabled.
  *
  * @See AbstractCpeConfigApiServlet for more details.
- * 
+ *
  */
 public class JobConfigServlet extends AbstractCpeConfigApiServlet<BaleenJob> {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Instantiates a new job config servlet.
+	 *
+	 * @param manager
+	 *            the manager
+	 */
 	public JobConfigServlet(BaleenJobManager manager) {
 		super("jobs", manager, JobConfigServlet.class);
 	}

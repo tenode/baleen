@@ -16,6 +16,12 @@ public class PipelineConfigServlet extends AbstractCpeConfigApiServlet<BaleenJob
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Instantiates a new pipeline config servlet.
+	 *
+	 * @param manager
+	 *            the manager
+	 */
 	public PipelineConfigServlet(BaleenPipelineManager manager) {
 		super("pipelines", manager, PipelineConfigServlet.class);
 	}
