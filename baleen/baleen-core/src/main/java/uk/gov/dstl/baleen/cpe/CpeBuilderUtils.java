@@ -93,6 +93,9 @@ public final class CpeBuilderUtils {
 		if (object == null || object instanceof String || object instanceof String[] || object instanceof Boolean) {
 			// NOTE: Boolean appears to be a special case for Uima (as the cast will fail)
 			return object;
+		} else if (object instanceof Number) {
+			// NOTE: Boolean appears to be a special case for Uima (as the cast will fail)
+			return object;
 		} else if (object instanceof Object[] || object instanceof Collection) {
 			return convertToParameterValues(object);
 		} else {
