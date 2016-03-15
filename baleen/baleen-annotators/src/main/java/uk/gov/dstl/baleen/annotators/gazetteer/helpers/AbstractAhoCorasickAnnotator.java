@@ -191,7 +191,7 @@ public abstract class AbstractAhoCorasickAnnotator extends BaleenAnnotator {
 
 	protected void createEntityAndAliases(JCas jCas, Integer start, Integer end, String value, String aliasKey,
 			Map<String, List<BaleenAnnotation>> entities) throws BaleenException {
-		BaleenAnnotation ent = createEntity(jCas, start, end, value, value);
+		BaleenAnnotation ent = createEntity(jCas, start, end, value, aliasKey);
 
 		List<String> aliases = new ArrayList<>(Arrays.asList(gazetteer.getAliases(aliasKey)));
 		aliases.add(aliasKey);

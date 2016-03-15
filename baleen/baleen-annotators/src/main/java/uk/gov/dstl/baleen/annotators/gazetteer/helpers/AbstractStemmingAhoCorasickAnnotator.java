@@ -124,7 +124,7 @@ public abstract class AbstractStemmingAhoCorasickAnnotator extends AbstractAhoCo
 		String content = words.toLowerCase();
 		while (!content.isEmpty()) {
 			indexMap.put(builder.length(), index);
-			if (content.matches("^[a-z].*")) {
+			if (Character.isAlphabetic(content.charAt(0))) {
 				Matcher m = WORD_PATTERN.matcher(content);
 
 				m.find();
