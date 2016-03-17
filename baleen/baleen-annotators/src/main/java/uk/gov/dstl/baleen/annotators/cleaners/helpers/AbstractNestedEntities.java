@@ -63,6 +63,7 @@ public abstract class AbstractNestedEntities<T extends Entity> extends
 				mergeWithExisting(keep, remove);
 			}
 		}
+		removeFromJCasIndex(toRemove);
 	}
 
 	private void removeNestedEntities(List<T> typeAnnotations, List<MergePair<T>> mergePairs, Set<T> toRemove) {
