@@ -15,7 +15,7 @@ import uk.gov.dstl.baleen.uima.BaleenAnnotator;
  * 
  */
 public class NPTitleEntity extends BaleenAnnotator {
-	private static final String[] TITLES = {"mr", "mrs", "ms", "miss", "master", 	//Common titles
+	public static final String[] TITLES = {"mr", "mrs", "ms", "miss", "master", 	//Common titles
 		"rev", "reverend", "fr", "father", "pope", "brother", "sister", "friar", "abbess", "abbott", "cardinal", "vicar",		//Religious titles (Christian)
 		"mullah", "imam", "ayatollah", "druid", "lama", "buddha", "rabbi", "rebbe",		//Religious titles (non-Christian)
 		"dr", "doctor", "prof", "professor",	//Educational titles
