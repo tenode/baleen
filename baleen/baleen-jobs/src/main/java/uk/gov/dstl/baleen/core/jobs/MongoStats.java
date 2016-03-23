@@ -109,7 +109,7 @@ public class MongoStats extends BaleenTask {
 				writer.write("timestamp,documents,entities,relations\n");
 			}
 
-			writer.write(String.format("%s,%d,%d,%d\n", formatter.format(LocalDateTime.now()),
+			writer.write(String.format("%s,%d,%d,%d%n", formatter.format(LocalDateTime.now()),
 					documentCollection.count(),
 					entityCollection.count(),
 					relationCollection.count()));
