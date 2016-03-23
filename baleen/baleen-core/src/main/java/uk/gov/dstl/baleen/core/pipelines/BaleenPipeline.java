@@ -19,10 +19,10 @@ import uk.gov.dstl.baleen.cpe.AbstractCpeController;
  *
  *
  */
-public class BaleenJob extends AbstractCpeController {
+public class BaleenPipeline extends AbstractCpeController {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(BaleenJob.class);
+			.getLogger(BaleenPipeline.class);
 
 	/**
 	 * New instance.
@@ -34,7 +34,7 @@ public class BaleenJob extends AbstractCpeController {
 	 * @param engine
 	 *            non-null
 	 */
-	public BaleenJob(String name, String yaml,
+	public BaleenPipeline(String name, String yaml,
 			CollectionProcessingEngine engine) {
 		super(name, yaml, engine);
 	}
@@ -51,7 +51,7 @@ public class BaleenJob extends AbstractCpeController {
 	 * @param engine
 	 *            non-null
 	 */
-	public BaleenJob(String name, String yaml, File source,
+	public BaleenPipeline(String name, String yaml, File source,
 			CollectionProcessingEngine engine) {
 		super(name, yaml, source, engine);
 	}
@@ -64,20 +64,23 @@ public class BaleenJob extends AbstractCpeController {
 	 * @param engine
 	 *            non-null
 	 */
-	public BaleenJob(String name, CollectionProcessingEngine engine) {
+	public BaleenPipeline(String name, CollectionProcessingEngine engine) {
 		super(name, engine);
 	}
 
 	@Override
 	public void entityProcessComplete(CAS cas, EntityProcessStatus status) {
 		if (status.isException()) {
-			for (Exception e : status.getExceptions()) {
-				LOGGER.warn("Document finished processing with errors", e);
+			if (status.getExceptions() != null && !status.getExceptions().isEmpty()) {
+				for (Exception e : status.getExceptions()) {
+					LOGGER.warn("Job ran with errors", e);
+				}
+			} else {
+				LOGGER.warn("Job ran with errors, but no detailed exception");
 			}
 		}
 
 		MetricsFactory.getInstance().getPipelineMetrics(getName()).finishDocumentProcess();
-
 	}
 
 }

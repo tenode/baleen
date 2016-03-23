@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import uk.gov.dstl.baleen.core.jobs.BaleenJobManager;
-import uk.gov.dstl.baleen.core.pipelines.BaleenJob;
+import uk.gov.dstl.baleen.core.pipelines.BaleenPipeline;
 import uk.gov.dstl.baleen.testing.servlets.ServletCaller;
 
 /**
@@ -46,7 +46,7 @@ public class JobConfigServletTest {
 
 	@Test
 	public void testEmpty() throws Exception {
-		BaleenJob pipeline = new BaleenJob("name", null, null);
+		BaleenPipeline pipeline = new BaleenPipeline("name", null, null);
 		doReturn(Optional.of(pipeline)).when(manager).get(anyString());
 
 		ServletCaller caller = new ServletCaller();
@@ -57,7 +57,7 @@ public class JobConfigServletTest {
 
 	@Test
 	public void testWithConfig() throws Exception {
-		BaleenJob pipeline = new BaleenJob("name", "Config", null);
+		BaleenPipeline pipeline = new BaleenPipeline("name", "Config", null);
 		doReturn(Optional.of(pipeline)).when(manager).get(anyString());
 
 		ServletCaller caller = new ServletCaller();

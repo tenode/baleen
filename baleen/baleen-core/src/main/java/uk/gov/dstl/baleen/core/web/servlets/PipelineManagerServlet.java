@@ -1,7 +1,7 @@
 //Dstl (c) Crown Copyright 2015
 package uk.gov.dstl.baleen.core.web.servlets;
 
-import uk.gov.dstl.baleen.core.pipelines.BaleenJob;
+import uk.gov.dstl.baleen.core.pipelines.BaleenPipeline;
 import uk.gov.dstl.baleen.core.pipelines.BaleenPipelineManager;
 import uk.gov.dstl.baleen.cpe.AbstractCpeManager;
 
@@ -11,7 +11,7 @@ import uk.gov.dstl.baleen.cpe.AbstractCpeManager;
  * @see AbstractCpeManagerApiServlet for more details of usage.
  *
  */
-public class PipelineManagerServlet extends AbstractCpeManagerApiServlet<BaleenJob> {
+public class PipelineManagerServlet extends AbstractCpeManagerApiServlet<BaleenPipeline> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,7 +21,7 @@ public class PipelineManagerServlet extends AbstractCpeManagerApiServlet<BaleenJ
 	 * @param manager
 	 *            the manager
 	 */
-	public PipelineManagerServlet(AbstractCpeManager<BaleenJob> manager) {
+	public PipelineManagerServlet(AbstractCpeManager<BaleenPipeline> manager) {
 		super("pipelines", manager, PipelineManagerServlet.class);
 	}
 }

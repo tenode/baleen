@@ -10,7 +10,7 @@ import uk.gov.dstl.baleen.cpe.JobCpeBuilder;
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 /**
- * Manages life cycle of a collection of {@link uk.gov.dstl.baleen.core.pipelines.BaleenJob}.
+ * Manages life cycle of a collection of {@link uk.gov.dstl.baleen.core.pipelines.BaleenPipeline}.
  *
  * A default list of pipelines can be configured through YAML as a list of objects with a
  * <i>file</i> property and optionally a <i>name</i> property:

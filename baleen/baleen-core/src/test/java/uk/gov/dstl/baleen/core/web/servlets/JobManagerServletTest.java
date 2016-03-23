@@ -23,7 +23,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import uk.gov.dstl.baleen.core.jobs.BaleenJobManager;
-import uk.gov.dstl.baleen.core.pipelines.BaleenJob;
+import uk.gov.dstl.baleen.core.pipelines.BaleenPipeline;
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 import uk.gov.dstl.baleen.testing.servlets.ServletCaller;
 
@@ -53,14 +53,14 @@ public class JobManagerServletTest {
 	@Mock
 	CollectionProcessingEngine engine;
 
-	BaleenJob realPipeline;
+	BaleenPipeline realPipeline;
 
 	@Mock
-	BaleenJob mockPipeline;
+	BaleenPipeline mockPipeline;
 
 	@Before
 	public void before() {
-		realPipeline = new BaleenJob(REAL, engine);
+		realPipeline = new BaleenPipeline(REAL, engine);
 
 		doReturn(true).when(jobManager).has(REAL);
 
@@ -266,7 +266,7 @@ public class JobManagerServletTest {
 		reset(engine);
 		doReturn(true).when(engine).isProcessing();
 
-		realPipeline = new BaleenJob(REAL, "**could be a YAML string**", engine);
+		realPipeline = new BaleenPipeline(REAL, "**could be a YAML string**", engine);
 		doReturn(Optional.of(realPipeline)).when(jobManager).get(REAL);
 		doReturn(Collections.singleton(realPipeline)).when(jobManager).getAll();
 
@@ -286,7 +286,7 @@ public class JobManagerServletTest {
 		reset(engine);
 		doReturn(true).when(engine).isProcessing();
 
-		realPipeline = new BaleenJob(REAL, "**could be a YAML string**", engine);
+		realPipeline = new BaleenPipeline(REAL, "**could be a YAML string**", engine);
 		doReturn(Optional.of(realPipeline)).when(jobManager).get(REAL);
 		doReturn(Collections.singleton(realPipeline)).when(jobManager).getAll();
 
@@ -306,7 +306,7 @@ public class JobManagerServletTest {
 		reset(engine);
 		doReturn(true).when(engine).isProcessing();
 
-		realPipeline = new BaleenJob(REAL, "**could be a YAML string**",
+		realPipeline = new BaleenPipeline(REAL, "**could be a YAML string**",
 				new File(JobManagerServletTest.class.getResource("blank.yaml").toURI()), engine);
 		doReturn(Optional.of(realPipeline)).when(jobManager).get(REAL);
 		doReturn(Collections.singleton(realPipeline)).when(jobManager).getAll();
@@ -327,7 +327,7 @@ public class JobManagerServletTest {
 		reset(engine);
 		doReturn(true).when(engine).isProcessing();
 
-		realPipeline = new BaleenJob(REAL, "**could be a YAML string**", new File("missing.yaml"), engine);
+		realPipeline = new BaleenPipeline(REAL, "**could be a YAML string**", new File("missing.yaml"), engine);
 		doReturn(Optional.of(realPipeline)).when(jobManager).get(REAL);
 		doReturn(Collections.singleton(realPipeline)).when(jobManager).getAll();
 
