@@ -71,8 +71,12 @@ public class BaleenJob extends AbstractCpeController {
 	@Override
 	public void entityProcessComplete(CAS cas, EntityProcessStatus status) {
 		if (status.isException()) {
-			for (Exception e : status.getExceptions()) {
-				LOGGER.warn("Job ran with errors", e);
+			if (status.getExceptions() != null && !status.getExceptions().isEmpty()) {
+				for (Exception e : status.getExceptions()) {
+					LOGGER.warn("Job ran with errors", e);
+				}
+			} else {
+				LOGGER.warn("Job ran with errors, but no detailed exception");
 			}
 		}
 

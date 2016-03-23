@@ -11,11 +11,15 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.apache.uima.collection.CollectionProcessingEngine;
+import org.apache.uima.collection.EntityProcessStatus;
+import org.apache.uima.collection.impl.EntityProcessStatusImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import uk.gov.dstl.baleen.core.pipelines.BaleenJob;
@@ -163,5 +167,26 @@ public class BaleenJobTest {
 		doReturn(true).when(engine).isProcessing();
 		pipeline.stop();
 		verify(engine).stop();
+	}
+
+	@Test
+	public void testCompletion() {
+		BaleenJob pipeline = new BaleenJob("test", engine);
+
+		// Run through ok
+		EntityProcessStatus status = new EntityProcessStatusImpl(null);
+		pipeline.entityProcessComplete(null, status);
+
+		// Run through failed
+		EntityProcessStatus failedStatus = Mockito.mock(EntityProcessStatus.class);
+		Mockito.when(failedStatus.isException()).thenReturn(true);
+		pipeline.entityProcessComplete(null, failedStatus);
+
+		// Run through failed with exceptions
+		EntityProcessStatus exceptionStatus = Mockito.mock(EntityProcessStatus.class);
+		Mockito.when(exceptionStatus.isException()).thenReturn(true);
+		Mockito.when(exceptionStatus.getExceptions()).thenReturn(Arrays.asList(new Exception("test")));
+		pipeline.entityProcessComplete(null, exceptionStatus);
+
 	}
 }
