@@ -255,8 +255,13 @@ public class PipelineCpeBuilder extends AbstractCpeBuilder {
 
 		Object[] params = CpeBuilderUtils.extractParams(getGlobalConfig(), getIgnoreParams(),
 				getOrCreateResources(clazz));
+		// Whilst this says createExternalResourceDescription says Object Object it performs a cast
+		// to String so we convert that here.
+		// TODO: I wonder if this will inject values correctly?
+
+		Object[] stringParams = CpeBuilderUtils.convertToStringArray(params);
 		ExternalResourceDescription erd = ExternalResourceFactory.createExternalResourceDescription(BALEEN_HISTORY,
-				clazz, params);
+				clazz, stringParams);
 		addResource(BALEEN_HISTORY, erd);
 	}
 

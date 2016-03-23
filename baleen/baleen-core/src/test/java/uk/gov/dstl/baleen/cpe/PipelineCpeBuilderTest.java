@@ -41,34 +41,34 @@ public class PipelineCpeBuilderTest {
 
 		AnalysisEngine cp0 = (AnalysisEngine) cpe.getCasProcessors()[0];
 		assertEquals(RED, cp0.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COLOR));
-		assertEquals("7", cp0.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
+		assertEquals(7, cp0.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
 		assertEquals(PIPELINE, cp0.getConfigParameterValue(PipelineCpeBuilder.PIPELINE_NAME));
 		assertEquals("annotator:uk.gov.dstl.baleen.testing.DummyAnnotator1", cp0.getAnalysisEngineMetaData().getName());
 
 		AnalysisEngine cp1 = (AnalysisEngine) cpe.getCasProcessors()[1];
 		assertEquals(GREEN, cp1.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COLOR));
-		assertEquals("7", cp1.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
+		assertEquals(7, cp1.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
 		assertEquals(PIPELINE, cp1.getConfigParameterValue(PipelineCpeBuilder.PIPELINE_NAME));
 		assertEquals("annotator:uk.gov.dstl.baleen.testing.DummyAnnotator1 (2)",
 				cp1.getAnalysisEngineMetaData().getName());
 
 		AnalysisEngine cp2 = (AnalysisEngine) cpe.getCasProcessors()[2];
 		assertEquals(RED, cp2.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COLOR));
-		assertEquals("7", cp2.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
+		assertEquals(7, cp2.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
 		assertEquals(PIPELINE, cp2.getConfigParameterValue(PipelineCpeBuilder.PIPELINE_NAME));
 		assertEquals("annotator:uk.gov.dstl.baleen.testing.DummyAnnotator1 (3)",
 				cp2.getAnalysisEngineMetaData().getName());
 
 		AnalysisEngine cp3 = (AnalysisEngine) cpe.getCasProcessors()[3];
 		assertEquals(RED, cp3.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COLOR));
-		assertEquals("6", cp3.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
+		assertEquals(6, cp3.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
 		assertEquals(SQUARE, cp3.getConfigParameterValue(DUMMY_CONFIG_SHAPE));
 		assertEquals(PIPELINE, cp3.getConfigParameterValue(PipelineCpeBuilder.PIPELINE_NAME));
 		assertEquals("annotator:uk.gov.dstl.baleen.testing.DummyAnnotator2", cp3.getAnalysisEngineMetaData().getName());
 
 		AnalysisEngine cp4 = (AnalysisEngine) cpe.getCasProcessors()[4];
 		assertEquals(RED, cp4.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COLOR));
-		assertEquals("7", cp4.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
+		assertEquals(7, cp4.getConfigParameterValue(DUMMY_CONFIG_EXAMPLE_COUNT));
 		assertEquals(PIPELINE, cp4.getConfigParameterValue(PipelineCpeBuilder.PIPELINE_NAME));
 		assertEquals("consumer:uk.gov.dstl.baleen.testing.DummyConsumer", cp4.getAnalysisEngineMetaData().getName());
 	}

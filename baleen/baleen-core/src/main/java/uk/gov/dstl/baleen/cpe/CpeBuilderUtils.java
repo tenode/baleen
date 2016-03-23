@@ -93,9 +93,16 @@ public final class CpeBuilderUtils {
 		if (object == null || object instanceof String || object instanceof String[] || object instanceof Boolean) {
 			// NOTE: Boolean appears to be a special case for Uima (as the cast will fail)
 			return object;
-		} else if (object instanceof Number) {
-			// NOTE: Boolean appears to be a special case for Uima (as the cast will fail)
-			return object.toString();
+		} else if (object instanceof Integer) {
+			return object;
+		} else if (object instanceof Long) {
+			// Seems in UIMA we need to convert long to int
+			return ((Long) object).intValue();
+		} else if (object instanceof Float) {
+			return object;
+		} else if (object instanceof Double) {
+			// Seems in UIMA we need to convert double to float
+			return ((Double) object).floatValue();
 		} else if (object instanceof Object[] || object instanceof Collection) {
 			return convertToParameterValues(object);
 		} else {
@@ -282,5 +289,22 @@ public final class CpeBuilderUtils {
 		} else {
 			return Collections.emptyMap();
 		}
+	}
+
+	/**
+	 * Convert to an array of strings (ie toString all the content of params).
+	 *
+	 * @param params
+	 *            the params
+	 * @return the object[] (non-null, same size as params and containing all the same nulls)
+	 */
+	public static Object[] convertToStringArray(Object[] params) {
+		Object[] stringParams = new String[params.length];
+		for (int i = 0; i < params.length; i++) {
+			if (params[i] != null) {
+				stringParams[i] = params[i].toString();
+			}
+		}
+		return stringParams;
 	}
 }

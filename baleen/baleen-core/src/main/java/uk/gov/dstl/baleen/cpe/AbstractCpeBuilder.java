@@ -302,7 +302,7 @@ public abstract class AbstractCpeBuilder {
 		} else if (value instanceof String) {
 			globalConfig.put(key, value);
 		} else if (value instanceof Number || value instanceof Boolean) {
-			globalConfig.put(key, value.toString());
+			globalConfig.put(key, value);
 		}
 
 	}
@@ -395,8 +395,12 @@ public abstract class AbstractCpeBuilder {
 				} else {
 					Map<String, ExternalResourceDescription> erds = getOrCreateResources(f.getType());
 					Object[] params = CpeBuilderUtils.extractParams(globalConfig, ignoreParams, erds);
+					// Since createExternalResourceDescription actually cases objects to strings we
+					// need to convert
+					// TODO: Potentially dangerous for inject, but what can we do!
+					Object[] stringParams = CpeBuilderUtils.convertToStringArray(params);
 					erd = ExternalResourceFactory.createExternalResourceDescription(key,
-							(Class<? extends Resource>) f.getType(), params);
+							(Class<? extends Resource>) f.getType(), stringParams);
 					resourceDescriptors.put(key, erd);
 				}
 
