@@ -16,7 +16,7 @@ import org.apache.uima.jcas.cas.StringArray;
  *
  *
  */
-public class UimaTypesUtils {
+public final class UimaTypesUtils {
 	private UimaTypesUtils() {
 		// Utility
 	}
@@ -76,7 +76,7 @@ public class UimaTypesUtils {
 	}
 
 	/**
-	 * Convert acollection (of annotation) to an FSArray
+	 * Convert a collection (of annotation) to an FSArray
 	 *
 	 * @param jCas
 	 *            the jcas
