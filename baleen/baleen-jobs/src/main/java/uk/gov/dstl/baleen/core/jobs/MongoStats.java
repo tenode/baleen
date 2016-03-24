@@ -1,8 +1,11 @@
 package uk.gov.dstl.baleen.core.jobs;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -103,7 +106,7 @@ public class MongoStats extends BaleenTask {
 		File file = new File(filename);
 		boolean newFile = !file.exists() || file.length() == 0;
 
-		try (FileWriter writer = new FileWriter(file, true)) {
+		try (Writer writer = new OutputStreamWriter(new FileOutputStream(filename, true), StandardCharsets.UTF_8)) {
 			// We have a new file, so write a header line
 			if (newFile) {
 				writer.write("timestamp,documents,entities,relations\n");
