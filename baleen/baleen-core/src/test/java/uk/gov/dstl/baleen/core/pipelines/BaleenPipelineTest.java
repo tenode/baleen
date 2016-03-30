@@ -22,7 +22,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import uk.gov.dstl.baleen.core.jobs.BaleenJob;
 import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 /**
@@ -181,7 +180,7 @@ public class BaleenPipelineTest {
 
 	@Test
 	public void testCompletion() {
-		BaleenJob pipeline = new BaleenJob("test", engine);
+		BaleenPipeline pipeline = new BaleenPipeline("test", engine);
 
 		// Run through ok
 		EntityProcessStatus status = new EntityProcessStatusImpl(null);
